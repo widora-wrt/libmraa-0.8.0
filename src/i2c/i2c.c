@@ -31,9 +31,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <inttypes.h>
 #include <sys/types.h>
-#include <sys/errno.h>
 #include <sys/ioctl.h>
 #include "linux/i2c-dev.h"
 

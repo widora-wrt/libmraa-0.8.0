@@ -46,6 +46,7 @@ typedef enum {
     MRAA_BEAGLEBONE = 6,            /**< The different BeagleBone Black Modes B/C */
     MRAA_BANANA = 7,                /**< Allwinner A20 based Banana Pi and Banana Pro */
     MRAA_INTEL_NUC5 = 8,            /**< The Intel 5th generations Broadwell NUCs */
+    MRAA_MTK_LINKIT = 9,            /**< Mediatek MT7688 based Linkit (Air) */
 
     // USB platform extenders start at 256
     MRAA_FTDI_FT4222 = 256,         /**< FTDI FT4222 USB to i2c bridge */

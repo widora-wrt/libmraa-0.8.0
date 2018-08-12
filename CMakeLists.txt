@@ -14,12 +14,7 @@ include(GNUInstallDirs)
 set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 # Make a version file containing the current version from git.
-include (GetGitRevisionDescription)
-git_describe (VERSION "--tags")
-if ("x_${VERSION}" STREQUAL "x_GIT-NOTFOUND" OR "x_${VERSION}" STREQUAL "x_HEAD-HASH-NOTFOUND")
-  message (WARNING " - Install git to compile a production libmraa!")
-  set (VERSION "v0.8.0-dirty")
-endif ()
+set (VERSION "v0.8.0")
 
 message (INFO " - libmraa Version ${VERSION}")
 
@@ -84,8 +79,10 @@ if (DETECTED_ARCH STREQUAL "i586" OR DETECTED_ARCH STREQUAL "x86_64"
   set (X86PLAT ON)
 elseif (DETECTED_ARCH MATCHES "arm.*")
   set (ARMPLAT ON)
+elseif (DETECTED_ARCH MATCHES "mips")
+  set (MIPSPLAT ON)
 else ()
-  message(FATAL_ERROR "Only x86 and arm platforms currently supported")
+  message(FATAL_ERROR "Only x86, arm and mips platforms currently supported")
 endif()
 
 if (BUILDSWIGPYTHON)

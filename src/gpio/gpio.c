@@ -113,6 +113,8 @@ mraa_gpio_init_internal(mraa_adv_func_t* func_table, int pin)
         close(export);
     }
 
+    mraa_gpio_use_mmaped(dev, 1);
+
 init_internal_cleanup:
     if (status != MRAA_SUCCESS) {
         if (dev != NULL)
