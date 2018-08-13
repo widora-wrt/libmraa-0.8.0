@@ -32,5 +32,15 @@
 mraa_platform_t
 mraa_mips_platform()
 {
-    return  MRAA_MTK_LINKIT;
+    mraa_platform_t platform_type = MRAA_MTK_LINKIT;
+    switch (platform_type) {
+        case MRAA_MTK_LINKIT:
+            plat = mraa_mtk_linkit();
+            break;
+        default:
+            plat = NULL;
+            syslog(LOG_ERR, "Unknown Platform, currently not supported by MRAA");
+    }
+    return platform_type;
 }
+
