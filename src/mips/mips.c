@@ -32,24 +32,5 @@
 mraa_platform_t
 mraa_mips_platform()
 {
-    mraa_platform_t platform_type = MRAA_UNKNOWN_PLATFORM;
-    size_t len = 100;
-    char* line = malloc(len);
-    FILE* fh = fopen("/proc/cpuinfo", "r");
-    if (fh != NULL) {
-        platform_type = MRAA_MTK_LINKIT;
-        }
-        fclose(fh);
-    }
-    free(line);
-
-    switch (platform_type) {
-        case MRAA_MTK_LINKIT:
-            plat = mraa_mtk_linkit();
-            break;
-        default:
-            plat = NULL;
-            syslog(LOG_ERR, "Unknown Platform, currently not supported by MRAA");
-    }
-    return platform_type;
+    return  MRAA_MTK_LINKIT;
 }
