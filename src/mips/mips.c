@@ -37,12 +37,7 @@ mraa_mips_platform()
     char* line = malloc(len);
     FILE* fh = fopen("/proc/cpuinfo", "r");
     if (fh != NULL) {
-        while (getline(&line, &len, fh) != -1) {
-            if (strncmp(line, "machine", 7) == 0) {
-                if (strstr(line, "OPENWRT-GIDE")) {
-                    platform_type = MRAA_MTK_LINKIT;
-                }
-            }
+        platform_type = MRAA_MTK_LINKIT;
         }
         fclose(fh);
     }
