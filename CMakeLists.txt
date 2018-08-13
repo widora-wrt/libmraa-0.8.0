@@ -14,7 +14,7 @@ include(GNUInstallDirs)
 set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 # Make a version file containing the current version from git.
-set (VERSION "v0.8.0")
+set (VERSION "v0.8.3")
 
 message (INFO " - libmraa Version ${VERSION}")
 
