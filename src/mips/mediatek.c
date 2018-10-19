@@ -452,6 +452,26 @@ mraa_mtk_linkit()
     b->pins[37].gpio.pinmap = 37;
     gpio_mux_groups[37] = MUX_GPIO;
 
+    strncpy(b->pins[39].name, "GPIO39", MRAA_PIN_NAME_SIZE);
+    b->pins[39].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
+    b->pins[39].gpio.pinmap = 39;
+    gpio_mux_groups[39] = MUX_GPIO;
+
+    strncpy(b->pins[40].name, "GPIO40", MRAA_PIN_NAME_SIZE);
+    b->pins[40].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
+    b->pins[40].gpio.pinmap = 40;
+    gpio_mux_groups[40] = MUX_GPIO;
+
+    strncpy(b->pins[41].name, "GPIO41", MRAA_PIN_NAME_SIZE);
+    b->pins[41].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
+    b->pins[41].gpio.pinmap = 41;
+    gpio_mux_groups[41] = MUX_GPIO;
+
+    strncpy(b->pins[42].name, "GPIO42", MRAA_PIN_NAME_SIZE);
+    b->pins[42].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
+    b->pins[42].gpio.pinmap = 42;
+    gpio_mux_groups[42] = MUX_GPIO;
+
     strncpy(b->pins[44].name, "GPIO44", MRAA_PIN_NAME_SIZE);
     b->pins[44].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
     b->pins[44].gpio.pinmap = 44;
