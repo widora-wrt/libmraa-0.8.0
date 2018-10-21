@@ -119,7 +119,24 @@ struct _uart {
     mraa_adv_func_t* advance_func; /**< override function table */
     /*@}*/
 };
-
+/**
+ * A structure representing a LCD device
+ */
+struct _lcd {
+    /*@{*/
+    int index; /**< the uart index, as known to the os. */
+    const char* path; /**< the uart device path. */
+    int fd; /**< file descriptor for device. */
+    int xres;
+    int yres;
+    int xoffset;
+    int yoffset;
+    int line_length;
+    int bits_per_pixel;
+    char *fbp;
+    mraa_adv_func_t* advance_func; /**< override function table */
+    /*@}*/
+};
 /**
  * A bitfield representing the capabilities of a pin.
  */
@@ -231,6 +248,14 @@ typedef struct {
     /*@}*/
 } mraa_uart_dev_t;
 
+typedef struct {
+    /*@{*/
+    unsigned int index; /**< ID as exposed in the system */
+    int x; /**< uart rx */
+    int y; /**< uart tx */
+    const char* device_path; /**< To store "/dev/ttyS1" for example */
+    /*@}*/
+} mraa_lcd_dev_t;
 /**
  * A Structure representing a platform/board.
  */
@@ -249,8 +274,11 @@ typedef struct _board_t {
     unsigned int adc_raw; /**< ADC raw bit value */
     unsigned int adc_supported; /**< ADC supported bit value */
     unsigned int def_uart_dev; /**< Position in array of defult uart */
+    unsigned int def_lcd_dev; /**< Position in array of defult uart */
     unsigned int uart_dev_count; /**< Usable spi Count */
+    unsigned int lcd_dev_count; /**< Usable spi Count */
     mraa_uart_dev_t uart_dev[6]; /**< Array of UARTs */
+    mraa_lcd_dev_t lcd_dev[6]; /**< Array of UARTs */
     int pwm_default_period; /**< The default PWM period is US */
     int pwm_max_period; /**< Maximum period in us */
     int pwm_min_period; /**< Minimum period in us */

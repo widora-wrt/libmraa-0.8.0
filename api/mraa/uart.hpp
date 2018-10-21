@@ -191,7 +191,7 @@ class Uart
         return (Result) mraa_uart_set_baudrate(m_uart, baud);
     }
     Result
-    setBaudMTRate(unsigned int baud)
+    setBaudMyTestRate(unsigned int baud)
     {
         return (Result) mraa_uart_set_baudrate(m_uart, baud);
     }

@@ -339,7 +339,10 @@ mraa_result_t uart_init_pre(int index)
 	}
 	return 0;
 }
-
+mraa_result_t lcd_init_pre(int index)
+{
+	return 0;
+}
 mraa_result_t
 i2c_freq(mraa_i2c_context dev, mraa_i2c_mode_t mode)
 {
@@ -389,6 +392,7 @@ mraa_mtk_linkit()
     b->adv_func->pwm_init_post = pwm_init_post;
     b->adv_func->spi_init_pre = spi_init_pre;
     b->adv_func->uart_init_pre = uart_init_pre;
+    b->adv_func->lcd_init_pre = lcd_init_pre;
     b->adv_func->gpio_init_pre = gpio_init_pre;
     b->adv_func->i2c_set_frequency_replace = &i2c_freq;
 
@@ -607,7 +611,10 @@ mraa_mtk_linkit()
     b->uart_dev[2].rx = 21;
     b->uart_dev[2].tx = 20;
     b->uart_dev[2].device_path = "/dev/ttyS2";
-
+    b->lcd_dev_count = 2;
+    b->def_lcd_dev = 0;
+    b->lcd_dev[0].device_path="/dev/fb0";
+    b->lcd_dev[1].device_path="/dev/fb1";
     b->gpio_count = 0;
     for (i = 0; i < b->phy_pin_count; i++) {
         if (b->pins[i].capabilites.gpio) {

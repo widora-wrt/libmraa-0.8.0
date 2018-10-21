@@ -87,4 +87,6 @@ typedef struct {
 
     mraa_result_t (*uart_init_pre) (int index);
     mraa_result_t (*uart_init_post) (mraa_uart_context uart);
+
+    mraa_result_t (*lcd_init_pre) (int index);
 } mraa_adv_func_t;

@@ -33,6 +33,7 @@ extern "C" {
 #include "mraa/spi.h"
 #include "mraa/i2c.h"
 #include "mraa/uart.h"
+#include "mraa/lcd.h"
 
 #ifdef __cplusplus
 }
