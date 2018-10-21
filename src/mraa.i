@@ -14,6 +14,7 @@
         %include aio_class_doc.i
         %include spi_class_doc.i
         %include uart_class_doc.i
+        %include lcd_class_doc.i
     #endif
 #endif
 
@@ -26,6 +27,7 @@
     #include "spi.hpp"
     #include "aio.hpp"
     #include "uart.hpp"
+    #include "lcd.hpp"
 %}
 
 %exception {
@@ -58,3 +60,5 @@
 %include "aio.hpp"
 
 %include "uart.hpp"
+
+%include "lcd.hpp"
