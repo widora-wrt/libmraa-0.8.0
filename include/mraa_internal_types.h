@@ -134,6 +134,7 @@ struct _lcd {
     int line_length;
     int bits_per_pixel;
     char *fbp;
+    FILE* fphzk;
     mraa_adv_func_t* advance_func; /**< override function table */
     /*@}*/
 };
@@ -279,6 +280,7 @@ typedef struct _board_t {
     unsigned int lcd_dev_count; /**< Usable spi Count */
     mraa_uart_dev_t uart_dev[6]; /**< Array of UARTs */
     mraa_lcd_dev_t lcd_dev[6]; /**< Array of UARTs */
+    const char* font16_lib_path;
     int pwm_default_period; /**< The default PWM period is US */
     int pwm_max_period; /**< Maximum period in us */
     int pwm_min_period; /**< Minimum period in us */

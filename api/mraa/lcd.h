@@ -47,6 +47,51 @@ extern "C" {
 
 typedef struct _lcd* mraa_lcd_context;
 #define BIT(x) (1<<x)
+
+typedef struct{
+	unsigned char Witdh;
+	unsigned char High;
+	const unsigned char *ELib;
+	const unsigned char *EIndex;
+	const unsigned char *CLib;
+	const unsigned char *CIndex;
+}FontTypeStruct;
+
+extern const unsigned char GBK0612Lib[];
+extern const unsigned char GBK1212_Index[];
+extern const unsigned char GBK1212Lib[];
+
+extern const unsigned char GBK0816Lib[];
+extern const unsigned char GBK1616_Index[];
+extern const unsigned char GBK1616Lib[];
+
+extern const unsigned char GBK0824Lib[];
+extern const unsigned char GBK1624_Index[];
+extern const unsigned char GBK1624Lib[];
+
+extern const unsigned char GBK1224Lib[];
+extern const unsigned char GBK2424_Index[];
+extern const unsigned char GBK2424Lib[];
+
+extern const unsigned char GBK1632Lib[];
+extern const unsigned char GBK3232_Index[];
+extern const unsigned char GBK3232Lib[];
+
+extern const unsigned char GBK2448Lib[];
+extern const unsigned char GBK4848_Index[];
+extern const unsigned char GBK4848Lib[];
+
+
+extern const FontTypeStruct GBKLib_FontType1224;
+extern const FontTypeStruct GBKLib_FontType1616;
+extern const FontTypeStruct GBKLib_FontType1624;
+extern const FontTypeStruct GBKLib_FontType3232;
+extern const FontTypeStruct GBKLib_FontType2424;
+extern const FontTypeStruct GBKLib_FontType4848;
+
+const FontTypeStruct FontGetType(unsigned short f);
+
+extern const unsigned int gb2312_utf8_code[][2];
 /**
  * Initialise lcd_context, uses board mapping
  *
@@ -79,6 +124,7 @@ mraa_result_t mraa_lcd_stop(mraa_lcd_context dev);
  * @param length maximum size of buffer
  * @return the number of bytes read, or -1 if an error occurred
  */
+unsigned short mraa_lcd_rgb2tft(int c);
 mraa_result_t mraa_lcd_drawdot(mraa_lcd_context dev,unsigned int x,unsigned int y,unsigned short color);
 mraa_result_t mraa_lcd_drawline(mraa_lcd_context dev,unsigned int x1,unsigned int y1,unsigned int x2,unsigned int y2,unsigned short color);
 mraa_result_t mraa_lcd_drawrect(mraa_lcd_context dev,unsigned int x1,unsigned int y1,unsigned int x2,unsigned int y2,unsigned short Color);
@@ -86,9 +132,15 @@ mraa_result_t mraa_lcd_drawrectfill(mraa_lcd_context dev,unsigned int x1,unsigne
 mraa_result_t mraa_lcd_drawcircle(mraa_lcd_context dev,int x0,int y0,int r,int color);
 mraa_result_t mraa_lcd_drawcirclefill(mraa_lcd_context dev,unsigned int x0,unsigned int y0,unsigned int r,unsigned short color);
 mraa_result_t mraa_lcd_drawclear(mraa_lcd_context dev,unsigned short c);
-mraa_result_t Draw_X_8Bit(mraa_lcd_context dev,unsigned char Data,unsigned short X,unsigned short Y,unsigned short F_Color,unsigned short B_Color,unsigned short A_Color);
-mraa_result_t Draw_X_8Bit_(mraa_lcd_context dev,unsigned char Data,unsigned short X,unsigned short Y,unsigned short F_Color,unsigned short B_Color,unsigned short A_Color);
-mraa_result_t Draw_Y_8Bit(mraa_lcd_context dev,unsigned char Data,unsigned short X,unsigned short Y,unsigned short F_Color,unsigned short B_Color,unsigned short A_Color);
+mraa_result_t mraa_lcd_draw_x_8Bit(mraa_lcd_context dev,unsigned char Data,unsigned short X,unsigned short Y,unsigned short F_Color,unsigned short B_Color,unsigned short A_Color);
+mraa_result_t mraa_lcd_draw_x_8Bit_(mraa_lcd_context dev,unsigned char Data,unsigned short X,unsigned short Y,unsigned short F_Color,unsigned short B_Color,unsigned short A_Color);
+mraa_result_t mraa_lcd_draw_y_8Bit(mraa_lcd_context dev,unsigned char Data,unsigned short X,unsigned short Y,unsigned short F_Color,unsigned short B_Color,unsigned short A_Color);
+
+
+mraa_result_t mraa_drawfont_ascii(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,unsigned short Char,unsigned short f_color,unsigned short b_color,unsigned short a_color);
+mraa_result_t mraa_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,unsigned char *Str,unsigned short f_color,unsigned short b_color,unsigned short a_color);
+mraa_result_t mraa_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,unsigned char *word,unsigned short f_color,unsigned short b_color,unsigned short a_color);
+
 int mraa_lcd_read(mraa_lcd_context dev, char* buf, size_t length);
 
 /**

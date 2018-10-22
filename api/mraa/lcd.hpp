@@ -118,6 +118,11 @@ class Lcd
     {
         return (Result) mraa_lcd_drawclear(m_lcd,color);
     }
+    Result
+    drawString(unsigned short f,unsigned short x,unsigned short y,unsigned char *str,unsigned short f_color,unsigned short b_color,unsigned short a_color)
+    {
+        return (Result) mraa_lcd_drawfont_string(m_lcd,f,x,y,str,f_color,b_color,a_color);
+    }
     /**
      * Read bytes from the device into char* buffer
      *

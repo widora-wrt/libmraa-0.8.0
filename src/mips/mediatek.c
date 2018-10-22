@@ -615,6 +615,7 @@ mraa_mtk_linkit()
     b->def_lcd_dev = 0;
     b->lcd_dev[0].device_path="/dev/fb0";
     b->lcd_dev[1].device_path="/dev/fb1";
+    b->font16_lib_path="/www/cgi-bin/font/HZK16";
     b->gpio_count = 0;
     for (i = 0; i < b->phy_pin_count; i++) {
         if (b->pins[i].capabilites.gpio) {

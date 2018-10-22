@@ -17,6 +17,7 @@ set (mraa_LIB_SRCS_NOAUTO
   ${PROJECT_SOURCE_DIR}/src/aio/aio.c
   ${PROJECT_SOURCE_DIR}/src/uart/uart.c
   ${PROJECT_SOURCE_DIR}/src/lcd/lcd.c
+  ${PROJECT_SOURCE_DIR}/src/lcd/font.c
 )
 
 set (mraa_LIB_X86_SRCS_NOAUTO
