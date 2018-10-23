@@ -366,7 +366,7 @@ mraa_lcd_drawfont_ascii(mraa_lcd_context dev,unsigned short f,unsigned short X,u
 	return MRAA_SUCCESS;
 }
 mraa_result_t
-mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,unsigned char *word,unsigned short f_color,unsigned short b_color,unsigned short a_color)
+mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const char *word,unsigned short f_color,unsigned short b_color,unsigned short a_color)
 {            
     
     int  k=0, offset,utf8word;
@@ -400,7 +400,7 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
 }
 
 mraa_result_t
-mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,unsigned char *Str,unsigned short f_color,unsigned short b_color,unsigned short a_color)
+mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const char *Str,unsigned short f_color,unsigned short b_color,unsigned short a_color)
 {            
     unsigned short XX,i;
     FontTypeStruct Font;  
