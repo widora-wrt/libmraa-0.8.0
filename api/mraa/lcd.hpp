@@ -131,6 +131,7 @@ class Lcd
         f_color=mraa_lcd_rgb2tft(f_color);
         b_color=mraa_lcd_rgb2tft(b_color);
         a_color=mraa_lcd_rgb2tft(a_color);
+        
         return (Result) mraa_lcd_drawfont_string(m_lcd,f,x,y,data.c_str(),f_color,b_color,a_color);
     }
     /**
