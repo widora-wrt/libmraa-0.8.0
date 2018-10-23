@@ -126,12 +126,12 @@ class Lcd
         return (Result) mraa_lcd_drawclear(m_lcd,color);
     }
     Result
-    drawString(unsigned short f,unsigned short x,unsigned short y,unsigned char *str,unsigned int f_color,unsigned int b_color,unsigned int a_color)
+    drawString(unsigned short f,unsigned short x,unsigned short y,std::string data,unsigned int f_color,unsigned int b_color,unsigned int a_color)
     {
         f_color=mraa_lcd_rgb2tft(f_color);
         b_color=mraa_lcd_rgb2tft(b_color);
         a_color=mraa_lcd_rgb2tft(a_color);
-        return (Result) mraa_lcd_drawfont_string(m_lcd,f,x,y,str,f_color,b_color,a_color);
+        return (Result) mraa_lcd_drawfont_string(m_lcd,f,x,y,data.c_str(),f_color,b_color,a_color);
     }
     /**
      * Read bytes from the device into char* buffer
