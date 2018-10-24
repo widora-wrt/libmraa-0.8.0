@@ -71,9 +71,25 @@ mraa_lcd_init_raw(const char* path)
     struct fb_var_screeninfo vinfo;
     struct fb_fix_screeninfo finfo;
     FILE* fphzk;
-    long int screensize = 0;
-    int size;
+    long int screensize=0,size;
     mraa_lcd_context dev = mraa_lcd_init_internal(plat == NULL ? NULL : plat->adv_func);
+    fphzk= fopen("/www/cgi-bin/font/HZK16", "rb");
+    if(fphzk == NULL){
+        syslog(LOG_ERR,"Error: not found HZK16");
+        free(dev);
+        return NULL;
+    }
+    fseek(fphzk, 0, SEEK_END);
+    size = ftell(fphzk);
+    fseek(fphzk, 0, SEEK_SET);
+    if(size > 0)
+    {
+      printf("size: %d\n",size);
+      dev->f16p= (char *)calloc(size,sizeof(char));
+    }
+    printf("dev->f16p[0]=%x",dev->f16p[0]);
+    fread(dev->f16p, size, 1, fphzk);
+    fclose(fphzk);
     if (dev == NULL) {
         syslog(LOG_ERR, "uart: Failed to allocate memory for context");
         return NULL;
@@ -104,22 +120,6 @@ mraa_lcd_init_raw(const char* path)
     dev->bits_per_pixel= vinfo.bits_per_pixel;
     dev->xoffset= vinfo.xoffset;
     dev->line_length=finfo.line_length;
-	fphzk= fopen(plat->font16_lib_path, "rb");
-    if(fphzk == NULL){
-        syslog(LOG_ERR,"Error: not found HZK16");
-        free(dev);
-        return NULL;
-    }
-    fseek(fphzk, 0, SEEK_END);
-    size = ftell(fphzk);
-    fseek(fphzk, 0, SEEK_SET);
-    if(size > 0)
-    {
-      printf("size: %d\n",size);
-      dev->f16p= (char *)calloc(size,sizeof(char));
-    }
-    fread(dev->f16p, size, 1, fphzk);
-    fclose(fphzk);
 	screensize = dev->xres * dev->yres * dev->bits_per_pixel / 8;
     dev->fbp = (char *)mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED,dev->fd, 0);
     if ((int)dev->fbp == -1) {
