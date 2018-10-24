@@ -408,9 +408,9 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
     }
     printf("buf[0]=%xbuf[0]=%x\n",buf[0],buf[1]);
     offset = (94*(unsigned int)(buf[0]-0xa0-1)+(buf[1]-0xa0-1))*32;
-    for(i=0;i<32;i++)buffer[i]=0xff;//dev->f16p[offset+i];
+    for(i=0;i<32;i++)buffer[i]=dev->f16p[offset+i];
     printf("buffer[0]=%xbuffer[0]=%x\n",buffer[0],buffer[1]);
-    mraa_lcd_raw_full_lists(dev,(unsigned char *)(&buffer[0]),16,Font.High,X,Y,f_color,b_color,a_color);
+    mraa_lcd_draw_full_lists(dev,(unsigned char *)(&buffer[0]),16,Font.High,X,Y,f_color,b_color,a_color);
 	return MRAA_SUCCESS;
 }
 
