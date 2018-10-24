@@ -134,7 +134,7 @@ struct _lcd {
     int line_length;
     int bits_per_pixel;
     char *fbp;
-    FILE* fphzk;
+    char *f16p;
     mraa_adv_func_t* advance_func; /**< override function table */
     /*@}*/
 };

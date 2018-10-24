@@ -70,7 +70,9 @@ mraa_lcd_init_raw(const char* path)
 {
     struct fb_var_screeninfo vinfo;
     struct fb_fix_screeninfo finfo;
+    FILE* fphzk;
     long int screensize = 0;
+    int size;
     mraa_lcd_context dev = mraa_lcd_init_internal(plat == NULL ? NULL : plat->adv_func);
     if (dev == NULL) {
         syslog(LOG_ERR, "uart: Failed to allocate memory for context");
@@ -102,13 +104,22 @@ mraa_lcd_init_raw(const char* path)
     dev->bits_per_pixel= vinfo.bits_per_pixel;
     dev->xoffset= vinfo.xoffset;
     dev->line_length=finfo.line_length;
-	dev->fphzk = NULL;
-	dev->fphzk= fopen(plat->font16_lib_path, "rb");
-    if(dev->fphzk == NULL){
+	fphzk= fopen(plat->font16_lib_path, "rb");
+    if(fphzk == NULL){
         syslog(LOG_ERR,"Error: not found HZK16");
         free(dev);
         return NULL;
     }
+    fseek(fphzk, 0, SEEK_END);
+    size = ftell(fphzk);
+    fseek(fphzk, 0, SEEK_SET);
+    if(size > 0)
+    {
+      printf("size: %d\n",size);
+      dev->f16p= (char *)calloc(size,sizeof(char));
+    }
+    fread(dev->f16p, size, 1, fphzk);
+    fclose(fphzk);
 	screensize = dev->xres * dev->yres * dev->bits_per_pixel / 8;
     dev->fbp = (char *)mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED,dev->fd, 0);
     if ((int)dev->fbp == -1) {
@@ -335,10 +346,10 @@ mraa_lcd_stop(mraa_lcd_context dev)
         syslog(LOG_ERR, "lcd: stop: context is NULL");
         return MRAA_ERROR_INVALID_HANDLE;
     }
-	if(dev->fphzk!=NULL)
+	if(dev->f16p!=NULL)
 	{
-        fclose(dev->fphzk);
-    	dev->fphzk = NULL;
+        free(dev->f16p);
+    	dev->f16p= NULL;
 	}
     if (dev->fd >= 0) {
 		screensize = dev->xres * dev->yres * dev->bits_per_pixel / 8;
@@ -369,7 +380,7 @@ mraa_result_t
 mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const unsigned char *word,unsigned short f_color,unsigned short b_color,unsigned short a_color)
 {            
     
-    int  k=0, offset,utf8word;
+    int  k=0,i, offset,utf8word;
     FontTypeStruct Font; 
     unsigned char buffer[32];
     unsigned char buf[3] = "啊";
@@ -395,11 +406,9 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
     }
     printf("buf[0]=%xbuf[0]=%x\n",buf[0],buf[1]);
     offset = (94*(unsigned int)(buf[0]-0xa0-1)+(buf[1]-0xa0-1))*32;
-    fseek(dev->fphzk, offset, SEEK_SET);
-    fread(buffer, 1, 32, dev->fphzk);
+    for(i=0;i<32;i++)buffer[i]=dev->f16p[offset+i];
     printf("buffer[0]=%xbuffer[0]=%x\n",buffer[0],buffer[1]);
     mraa_lcd_raw_full_lists(dev,(unsigned char *)(&buffer[0]),16,Font.High,X,Y,f_color,b_color,a_color);
-    printf("dev->fphzk=%x\n",dev->fphzk);
 	return MRAA_SUCCESS;
 }
 
