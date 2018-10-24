@@ -89,13 +89,10 @@ mraa_lcd_init_raw(const char* path)
     fseek(fphzk, 0, SEEK_SET);
     if(size > 0)
     {
-      printf("size: %d\n",size);
       dev->f16p= (char *)calloc(size,sizeof(char));
     }
     fread(dev->f16p, size, 1, fphzk);
     fclose(fphzk);
-    for(size=0;size<100;size++)printf(" %x ",dev->f16p[size]);
-    
     dev->path = path;
     if (!dev->path) {
         syslog(LOG_ERR, "lcd: device path undefined, open failed");
@@ -393,7 +390,6 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
     }else{
         utf8word=word[0];utf8word<<=8;utf8word|=word[1];
     }
-    printf("utf8word=%x\n",utf8word);
     buf[0]=0xB0;
     buf[1]=0xA1;
     while(gb2312_utf8_code[k][1])
@@ -406,10 +402,8 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
         }
         k++;
     }
-    printf("buf[0]=%xbuf[0]=%x\n",buf[0],buf[1]);
     offset = (94*(unsigned int)(buf[0]-0xa0-1)+(buf[1]-0xa0-1))*32;
     for(i=0;i<32;i++)buffer[i]=dev->f16p[offset+i];
-    printf("buffer[0]=%xbuffer[0]=%x\n",buffer[0],buffer[1]);
     mraa_lcd_draw_full_lists(dev,(unsigned char *)(&buffer[0]),16,Font.High,X,Y,f_color,b_color,a_color);
 	return MRAA_SUCCESS;
 }
