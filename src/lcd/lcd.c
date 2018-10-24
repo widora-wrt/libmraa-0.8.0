@@ -397,7 +397,9 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
     offset = (94*(unsigned int)(buf[0]-0xa0-1)+(buf[1]-0xa0-1))*32;
     fseek(dev->fphzk, offset, SEEK_SET);
     fread(buffer, 1, 32, dev->fphzk);
+    printf("buffer[0]=%xbuffer[0]=%x\n",buffer[0],buffer[1]);
     mraa_lcd_raw_full_lists(dev,(unsigned char *)(&buffer[0]),16,Font.High,X,Y,f_color,b_color,a_color);
+    printf("dev->fphzk=%x\n",dev->fphzk);
 	return MRAA_SUCCESS;
 }
 
