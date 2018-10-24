@@ -73,6 +73,11 @@ mraa_lcd_init_raw(const char* path)
     FILE* fphzk;
     long int screensize=0,size;
     mraa_lcd_context dev = mraa_lcd_init_internal(plat == NULL ? NULL : plat->adv_func);
+    if (dev == NULL) {
+        syslog(LOG_ERR, "uart: Failed to allocate memory for context");
+        return NULL;
+    }
+
     fphzk= fopen("/www/cgi-bin/font/HZK16", "rb");
     if(fphzk == NULL){
         syslog(LOG_ERR,"Error: not found HZK16");
@@ -87,13 +92,10 @@ mraa_lcd_init_raw(const char* path)
       printf("size: %d\n",size);
       dev->f16p= (char *)calloc(size,sizeof(char));
     }
-    printf("dev->f16p[0]=%x",dev->f16p[0]);
     fread(dev->f16p, size, 1, fphzk);
     fclose(fphzk);
-    if (dev == NULL) {
-        syslog(LOG_ERR, "uart: Failed to allocate memory for context");
-        return NULL;
-    }
+    for(size=0;size<100;size++)printf(" %x ",dev->f16p[size]);
+    
     dev->path = path;
     if (!dev->path) {
         syslog(LOG_ERR, "lcd: device path undefined, open failed");
@@ -406,7 +408,7 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
     }
     printf("buf[0]=%xbuf[0]=%x\n",buf[0],buf[1]);
     offset = (94*(unsigned int)(buf[0]-0xa0-1)+(buf[1]-0xa0-1))*32;
-    for(i=0;i<32;i++)buffer[i]=dev->f16p[offset+i];
+    for(i=0;i<32;i++)buffer[i]=0xff;//dev->f16p[offset+i];
     printf("buffer[0]=%xbuffer[0]=%x\n",buffer[0],buffer[1]);
     mraa_lcd_raw_full_lists(dev,(unsigned char *)(&buffer[0]),16,Font.High,X,Y,f_color,b_color,a_color);
 	return MRAA_SUCCESS;
