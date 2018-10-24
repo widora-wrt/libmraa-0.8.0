@@ -366,7 +366,7 @@ mraa_lcd_drawfont_ascii(mraa_lcd_context dev,unsigned short f,unsigned short X,u
 	return MRAA_SUCCESS;
 }
 mraa_result_t
-mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const char *word,unsigned short f_color,unsigned short b_color,unsigned short a_color)
+mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const unsigned char *word,unsigned short f_color,unsigned short b_color,unsigned short a_color)
 {            
     
     int  k=0, offset,utf8word;
@@ -380,6 +380,7 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
     }else{
         utf8word=word[0];utf8word<<=8;utf8word|=word[1];
     }
+    printf("utf8word=%x\n",utf8word);
     buf[0]=0xB0;
     buf[1]=0xA1;
     while(gb2312_utf8_code[k][1])
@@ -392,6 +393,7 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
         }
         k++;
     }
+    printf("buf[0]=%xbuf[0]=%x\n",buf[0],buf[1]);
     offset = (94*(unsigned int)(buf[0]-0xa0-1)+(buf[1]-0xa0-1))*32;
     fseek(dev->fphzk, offset, SEEK_SET);
     fread(buffer, 1, 32, dev->fphzk);
@@ -400,7 +402,7 @@ mraa_lcd_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,un
 }
 
 mraa_result_t
-mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const char *Str,unsigned short f_color,unsigned short b_color,unsigned short a_color)
+mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const unsigned char *Str,unsigned short f_color,unsigned short b_color,unsigned short a_color)
 {            
     unsigned short XX,i;
     FontTypeStruct Font;  

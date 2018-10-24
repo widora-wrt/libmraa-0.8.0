@@ -132,7 +132,7 @@ class Lcd
         b_color=mraa_lcd_rgb2tft(b_color);
         a_color=mraa_lcd_rgb2tft(a_color);
         
-        return (Result) mraa_lcd_drawfont_string(m_lcd,f,x,y,data.c_str(),f_color,b_color,a_color);
+        return (Result) mraa_lcd_drawfont_string(m_lcd,f,x,y,(const unsigned char *)data.c_str(),f_color,b_color,a_color);
     }
     /**
      * Read bytes from the device into char* buffer
