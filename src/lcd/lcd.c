@@ -40,7 +40,12 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <jpeglib.h>
+#include <jerror.h> 
 #include "lcd.h"
 #include "mraa_internal.h"
 
@@ -456,6 +461,76 @@ mraa_lcd_read(mraa_lcd_context dev, char* buf, size_t len)
 int
 mraa_lcd_write(mraa_lcd_context dev, const char* buf, size_t len)
 {
-    return 0;
+    int fd=-1;
+    char cmd[100];
+    fd=open("/dev/tty0",O_RDWR);
+    if(fd<0)
+	{
+		printf("open errror\n");
+		exit(-1);
+	}
+	write(fd,buf,strlen(buf));
+	close(fd);
+
+   /* system('echo -e "\e[9;0" > /dev/tty0');
+    system('echo -e "\e[37m" > /dev/tty0');
+    system('echo -e "\e[0;0H" > /dev/tty0');*/
 }
 
+unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, int *h)
+{
+	struct jpeg_decompress_struct cinfo;
+	struct jpeg_error_mgr jerr;
+	FILE           *infile;
+	unsigned char  *buffer;
+	unsigned char *temp;
+	if ((infile = fopen(filename, "rb")) == NULL) {
+		fprintf(stderr, "open %s failed/n", filename);
+		exit(-1);
+	}
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_create_decompress(&cinfo);
+	jpeg_stdio_src(&cinfo, infile);
+	jpeg_read_header(&cinfo, TRUE);
+	jpeg_start_decompress(&cinfo);
+	*w = cinfo.output_width;
+	*h = cinfo.output_height;
+	if ((cinfo.output_width > dev->xres) ||(cinfo.output_height > dev->yres)) {
+		printf("too large JPEG file,cannot display/n");
+		return 0;
+	}
+	buffer = (unsigned char *) malloc(cinfo.output_width *cinfo.output_components * cinfo.output_height);
+	temp = buffer;
+	while (cinfo.output_scanline < cinfo.output_height) {
+		jpeg_read_scanlines(&cinfo, &buffer, 1);
+		buffer += cinfo.output_width * cinfo.output_components;
+	}
+    
+	jpeg_finish_decompress(&cinfo);
+	jpeg_destroy_decompress(&cinfo);
+	return temp;
+	fclose(infile);
+}
+
+mraa_result_t
+mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,unsigned char *name)
+{
+    int w ,h,i,j;
+    int color;
+	unsigned char *imgbuf;
+	imgbuf = mraa_lcd_getjpg(dev,name,&w,&h);
+	for(j = 0; j < h; j++)
+	{
+		for( i = 0; i < w; i++)
+		{
+			color= imgbuf[i*3 + j*w*3];
+            color<<=8;
+			color|=  imgbuf[i*3 + j*w*3 + 1];
+            color<<=8;
+			color|= imgbuf[i*3 + j*w*3+2];
+            mraa_lcd_drawdot(dev,x+i,y+j,mraa_lcd_rgb2tft(color));
+		}
+	}
+    free(imgbuf);
+    return MRAA_SUCCESS;
+}
