@@ -513,7 +513,7 @@ unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, in
 }
 
 mraa_result_t
-mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,unsigned char *name)
+mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name)
 {
     int w ,h,i,j;
     int color;
