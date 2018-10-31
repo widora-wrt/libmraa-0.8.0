@@ -528,7 +528,7 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
 			color|=  imgbuf[i*3 + j*w*3 + 1];
             color<<=8;
 			color|= imgbuf[i*3 + j*w*3+2];
-            mraa_lcd_drawdot(dev,x+i,y+j,mraa_lcd_rgb2tft(color));
+            mraa_lcd_drawdot(dev,x+i,y+j,mraa_lcd_rgb2tft(0xff00ff));
 		}
 	}
     free(imgbuf);
