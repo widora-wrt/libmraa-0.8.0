@@ -444,7 +444,7 @@ mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,
             } 
             offset=0;
             if(Font.High>16)offset=(((int)Font.High-16)/2+2);
-            mraa_lcd_drawfont_word(dev,1616,X,(int)Y+offset,&P[i],f_color,b_color,a_color);
+            mraa_lcd_drawfont_word(dev,1616,X,(int)Y+offset,&P[i],0xff00,b_color,a_color);
             if((P[i]&0xf0)==0xe0)i+=3;
              else i+=2;
             X+=8*2;
@@ -528,7 +528,7 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
 			color|=  imgbuf[i*3 + j*w*3 + 1];
             color<<=8;
 			color|= imgbuf[i*3 + j*w*3+2];
-            mraa_lcd_drawdot(dev,x+i,y+j,mraa_lcd_rgb2tft(0xff00ff));
+            mraa_lcd_drawdot(dev,x+i,y+j,mraa_lcd_rgb2tft(color));
 		}
 	}
     free(imgbuf);
