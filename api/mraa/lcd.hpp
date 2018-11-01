@@ -125,6 +125,7 @@ class Lcd
         color=mraa_lcd_rgb2tft(color);
         return (Result) mraa_lcd_drawclear(m_lcd,color);
     }
+    
     Result
     drawString(unsigned short f,float x,float y,std::string data,unsigned int f_color,unsigned int b_color,unsigned int a_color)
     {
