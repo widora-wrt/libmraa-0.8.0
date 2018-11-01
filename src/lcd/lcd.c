@@ -492,7 +492,7 @@ unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, in
 		fprintf(stderr, "open %s failed/n", filename);
 		exit(-1);
 	}
-    printf("1\n");
+    printf("12\n");
 	cinfo.err = jpeg_std_error(&jerr);
     printf("2\n");
 	jpeg_create_decompress(&cinfo);
