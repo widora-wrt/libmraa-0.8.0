@@ -494,6 +494,7 @@ unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, in
 	}
     printf("1\n");
 	cinfo.err = jpeg_std_error(&jerr);
+    printf("2\n");
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, infile);
 	jpeg_read_header(&cinfo, TRUE);
