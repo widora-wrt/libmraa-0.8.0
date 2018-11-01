@@ -83,45 +83,58 @@ class Lcd
     }
     
     Result
-    drawDot(float x, float y,unsigned int color)
+    drawDot(float x, float y,std::string colors)
     {
-        color=mraa_lcd_rgb2tft(color);
+        char *fc=(char *)colors.c_str();
+        int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         return (Result) mraa_lcd_drawdot(m_lcd, x, y,color);
     }
     Result
-    drawLine(float x1, float y1,float x2, float y2,unsigned int color)
+    drawLine(float x1, float y1,float x2, float y2,std::string colors)
     {
+        char *fc=(char *)colors.c_str();
+        int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         color=mraa_lcd_rgb2tft(color);
         return (Result) mraa_lcd_drawline(m_lcd, x1,y1,x2,y2,color);
     }
     
     Result
-    drawRect(float x1, float y1,float x2, float y2,unsigned int color)
+    drawRect(float x1, float y1,float x2, float y2,std::string colors)
     {
+        char *fc=(char *)colors.c_str();
+        int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         color=mraa_lcd_rgb2tft(color);
         return (Result) mraa_lcd_drawrect(m_lcd, x1,y1,x2,y2,color);
     }
     Result
-    drawRectfill(float x1, float y1,float x2, float y2,unsigned int color)
+    drawRectfill(float x1, float y1,float x2, float y2,std::string colors)
     {
+        char *fc=(char *)colors.c_str();
+        int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         color=mraa_lcd_rgb2tft(color);
         return (Result) mraa_lcd_drawrectfill(m_lcd, x1,y1,x2,y2,color);
     }
     Result
-    drawCircle(float x0,float y0,float r,int color)
+    drawCircle(float x0,float y0,float r,std::string colors)
     {
+        char *fc=(char *)colors.c_str();
+        int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         color=mraa_lcd_rgb2tft(color);
         return (Result) mraa_lcd_drawcircle(m_lcd, x0,y0,r,color);
     }
     Result
-    drawCirclefill(float x0,float y0,float r,int color)
+    drawCirclefill(float x0,float y0,float r,std::string colors)
     {
+        char *fc=(char *)colors.c_str();
+        int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         color=mraa_lcd_rgb2tft(color);
         return (Result) mraa_lcd_drawcirclefill(m_lcd, x0,y0,r,color);
     }
     Result
-    drawClear(int color)
+    drawClear(std::string colors)
     {
+         char *fc=(char *)colors.c_str();
+        int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         color=mraa_lcd_rgb2tft(color);
         return (Result) mraa_lcd_drawclear(m_lcd,color);
     }
