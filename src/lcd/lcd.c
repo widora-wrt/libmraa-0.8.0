@@ -418,8 +418,8 @@ mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,
 {            
     unsigned short XX,i;
     FontTypeStruct Font;  
-    int offset=0;
-	unsigned char *P=Str,w;
+    int offset=0,w;
+	const unsigned char *P=Str;
     Font=FontGetType(f);
     XX=X;
 	w=(Font.Witdh+4)/8;//+7是为了照顾宽度为6/12的字符
@@ -432,7 +432,7 @@ mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,
             {
                 X=XX;Y+=Font.High;
             } 
-            if(P[i]>=' '&&P[i]<='～')mraa_lcd_drawfont_ascii(dev,f,X,Y,P[i],f_color,b_color,a_color);
+            if(P[i]>=0x20&&P[i]<=0x7e)mraa_lcd_drawfont_ascii(dev,f,X,Y,P[i],f_color,b_color,a_color);
             if(P[i]=='\n')
             {
                 X=XX;Y+=Font.High;
@@ -481,7 +481,7 @@ mraa_lcd_write(mraa_lcd_context dev, const char* buf, size_t len)
     system('echo -e "\e[0;0H" > /dev/tty0');*/
 }
 
-unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, int *h)
+unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,const unsigned char * filename, int *w, int *h)
 {
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
