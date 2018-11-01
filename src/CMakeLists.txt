@@ -75,7 +75,7 @@ endif ()
 
 if (MIPSPLAT)
   add_subdirectory(mips)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DMIPSPLAT=1")
+  set(CMAKE_C_FLAGS "-ljpeg ${CMAKE_C_FLAGS} -DMIPSPLAT=1")
 endif()
 
 set (mraa_LIB_SRCS

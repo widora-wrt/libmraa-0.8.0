@@ -70,7 +70,7 @@ if (BUILDDOC)
       COMMAND ${YUIDOC_EXECUTABLE} -C --no-sort --helpers ${CMAKE_SOURCE_DIR}/doxygen2jsdoc/generators/yuidoc/tmpl/mraa/helper.js --themedir ${CMAKE_SOURCE_DIR}/doxygen2jsdoc/generators/yuidoc/tmpl/mraa -o html/node jsdoc/yuidoc/mraa
       COMMAND ${CMAKE_SOURCE_DIR}/doxygen2jsdoc/tolower.js -i html/node
       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-      DEPENDS doc
+      DEPENDS doc 
       COMMENT "Generating API documentation with Yuidoc" VERBATIM
   )
   else ()
