@@ -86,8 +86,8 @@ class Lcd
     drawDot(float x, float y,std::string colors)
     {
         char *fc=(char *)colors.c_str();
-        printf(fc);
-        printf(fc+1);
+        printf("%s",fc);
+        printf("%s",fc+1);
         int color=mraa_lcd_rgb2tft((int)strtol(fc+1,0, 16));
         return (Result) mraa_lcd_drawdot(m_lcd, x, y,color);
     }
