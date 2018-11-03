@@ -115,10 +115,9 @@ class Lcd
         return (Result) mraa_lcd_drawcirclefill(m_lcd, x0,y0,r,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
-    drawClear(int color)
+    drawClear(std::string colors)
     {
-        color=mraa_lcd_rgb2tft(color);
-        return (Result) mraa_lcd_drawclear(m_lcd,color);
+        return (Result) mraa_lcd_drawclear(m_lcd,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
     drawString(unsigned short f,unsigned short x,unsigned short y,std::string data,std::string f_color,std::string b_color,std::string a_color)
