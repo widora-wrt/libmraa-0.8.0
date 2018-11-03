@@ -432,7 +432,7 @@ mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,
             {
                 X=XX;Y+=Font.High;
             } 
-            if(P[i]>=' '&&P[i]<='～')mraa_lcd_drawfont_ascii(dev,f,X,Y,P[i],f_color,b_color,a_color);
+            if(P[i]>=0x20&&P[i]<=0x7e)mraa_lcd_drawfont_ascii(dev,f,X,Y,P[i],f_color,b_color,a_color);
             if(P[i]=='\n')
             {
                 X=XX;Y+=Font.High;
