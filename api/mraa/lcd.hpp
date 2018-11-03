@@ -116,7 +116,6 @@ class Lcd
     Result
     drawClear(std::string colors)
     {
-
         return (Result) mraa_lcd_drawclear(m_lcd,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
