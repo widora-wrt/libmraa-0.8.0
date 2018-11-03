@@ -83,10 +83,10 @@ class Lcd
     }
     
     Result
-    drawDot(float x, float y,unsigned int color)
+    drawDot(float x, float y,unsigned int colors)
     {
-        color=mraa_lcd_rgb2tft(color);
-        return (Result) mraa_lcd_drawdot(m_lcd, x, y,color);
+        colors=mraa_lcd_rgb2tft(colors);
+        return (Result) mraa_lcd_drawdot(m_lcd, x, y,colors);
     }
     Result
     drawLine(unsigned int x1, unsigned int y1,unsigned int x2, unsigned int y2,unsigned int color)
