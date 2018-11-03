@@ -85,32 +85,31 @@ class Lcd
     Result
     drawDot(float x, float y,std::string colors)
     {
-        printf("%s",colors.c_str()+1);
         return (Result) mraa_lcd_drawdot(m_lcd, x, y,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
-    drawLine(unsigned int x1, unsigned int y1,unsigned int x2, unsigned int y2,std::string colors)
+    drawLine(float x1, float y1,float x2, float y2,std::string colors)
     {
         return (Result) mraa_lcd_drawline(m_lcd, x1,y1,x2,y2,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     
     Result
-    drawRect(unsigned int x1, unsigned int y1,unsigned int x2, unsigned int y2,std::string colors)
+    drawRect(float x1,float y1,float x2, float y2,std::string colors)
     {
         return (Result) mraa_lcd_drawrect(m_lcd, x1,y1,x2,y2,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
-    drawRectfill(unsigned int x1, unsigned int y1,unsigned int x2, unsigned int y2,std::string colors)
+    drawRectfill(float x1, float y1,float x2, float y2,std::string colors)
     {
         return (Result) mraa_lcd_drawrectfill(m_lcd, x1,y1,x2,y2,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
-    drawCircle(int x0,int y0,int r,std::string colors)
+    drawCircle(float x0,float y0,float r,std::string colors)
     {
         return (Result) mraa_lcd_drawcircle(m_lcd, x0,y0,r,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
-    drawCirclefill(int x0,int y0,int r,std::string colors)
+    drawCirclefill(float x0,float y0,float r,std::string colors)
     {
         return (Result) mraa_lcd_drawcirclefill(m_lcd, x0,y0,r,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
@@ -120,7 +119,7 @@ class Lcd
         return (Result) mraa_lcd_drawclear(m_lcd,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
-    drawString(unsigned short f,unsigned short x,unsigned short y,std::string data,std::string f_color,std::string b_color,std::string a_color)
+    drawString(unsigned short f,float x,float y,std::string data,std::string f_color,std::string b_color,std::string a_color)
     {
         return (Result) mraa_lcd_drawfont_string(m_lcd,f,x,y,(const unsigned char *)data.c_str(), \
         mraa_lcd_rgb2tft((int)strtol(f_color.c_str()+1,0, 16)), \
@@ -128,7 +127,7 @@ class Lcd
         mraa_lcd_rgb2tft((int)strtol(a_color.c_str()+1,0, 16)));
     }
     Result
-    drawJpg(unsigned short x,unsigned short y,std::string data)
+    drawJpg(float x,float y,std::string data)
     {
         return (Result) mraa_lcd_drawjpg(m_lcd,x,y,(const unsigned char *)data.c_str());
     }
