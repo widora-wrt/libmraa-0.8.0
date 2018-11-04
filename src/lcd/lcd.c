@@ -465,8 +465,13 @@ mraa_lcd_read(mraa_lcd_context dev, char* buf, size_t len)
 int
 mraa_lcd_write(mraa_lcd_context dev, const char* buf, size_t len)
 {
-
-    system("ls");
+    char cmd[50]="";
+    strcat(cmd,"echo -e '");
+    strcat(cmd,buf);
+    strcat(cmd,"' > /dev/tty0");
+    system(cmd);
+    system(buf);
+    printf("s=%s",cmd);
    /* system('echo -e "\e[9;0" > /dev/tty0');
     system('echo -e "\e[37m" > /dev/tty0');
     system('echo -e "\e[0;0H" > /dev/tty0');*/
