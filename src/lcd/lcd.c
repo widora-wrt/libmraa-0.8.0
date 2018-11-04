@@ -470,11 +470,6 @@ mraa_lcd_write(mraa_lcd_context dev, const char* buf, size_t len)
     strcat(cmd,buf);
     strcat(cmd,"' > /dev/tty0");
     system(cmd);
-    system(buf);
-    printf("s=%s",cmd);
-   /* system('echo -e "\e[9;0" > /dev/tty0');
-    system('echo -e "\e[37m" > /dev/tty0');
-    system('echo -e "\e[0;0H" > /dev/tty0');*/
 }
 
 unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, int *h)
