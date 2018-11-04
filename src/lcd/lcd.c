@@ -83,7 +83,7 @@ mraa_lcd_init_raw(const char* path)
         return NULL;
     }
 
-    fphzk= fopen("/www/cgi-bin/font/HZK16", "rb");
+    fphzk= fopen("/www/cgi-bin/opt/font/HZK16", "rb");
     if(fphzk == NULL){
         syslog(LOG_ERR,"Error: not found HZK16");
         free(dev);
