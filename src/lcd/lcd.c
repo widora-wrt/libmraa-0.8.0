@@ -492,14 +492,11 @@ unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, in
 		fprintf(stderr, "open %s failed/n", filename);
 		exit(-1);
 	}
-    printf("1\n");
 	cinfo.err = jpeg_std_error(&jerr);
-    printf("2\n");
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, infile);
 	jpeg_read_header(&cinfo, TRUE);
 	jpeg_start_decompress(&cinfo);
-    printf("cinfo.output_width=%d\n",cinfo.output_width);
 	*w = cinfo.output_width;
 	*h = cinfo.output_height;
 	if ((cinfo.output_width > dev->xres) ||(cinfo.output_height > dev->yres)) {
@@ -512,7 +509,6 @@ unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, in
 		jpeg_read_scanlines(&cinfo, &buffer, 1);
 		buffer += cinfo.output_width * cinfo.output_components;
 	}
-    printf("cinfo.3=%d\n",3);
 	jpeg_finish_decompress(&cinfo);
 	jpeg_destroy_decompress(&cinfo);
     fclose(infile);
