@@ -157,7 +157,7 @@ class Lcd
         return mraa_lcd_write(m_lcd, data, (size_t) length);
     }
     Result
-    writeline(std::string data)
+    writeLine(std::string data)
     {
         return (Result) mraa_lcd_writeline(m_lcd,(const char *)data.c_str());
     }
