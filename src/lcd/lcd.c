@@ -470,6 +470,7 @@ mraa_lcd_write(mraa_lcd_context dev, const char* buf, size_t len)
     strcat(cmd,buf);
     strcat(cmd,"' > /dev/tty0");
     system(cmd);
+    return len;
 }
 
 unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, int *h)
@@ -528,5 +529,15 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
 		}
 	}
     free(imgbuf);
+    return MRAA_SUCCESS;
+}
+mraa_result_t
+mraa_lcd_writeline(mraa_lcd_context dev, const char* buf)
+{
+    char cmd[50]="";
+    strcat(cmd,"echo -e '");
+    strcat(cmd,buf);
+    strcat(cmd,"' > /dev/tty0");
+    system(cmd);
     return MRAA_SUCCESS;
 }
