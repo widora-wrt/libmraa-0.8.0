@@ -515,7 +515,6 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     int color;
 	unsigned char *imgbuf;
 	imgbuf = mraa_lcd_getjpg(dev,name,&w,&h);
-    printf("%d",imgbuf);
 	for(j = 0; j < h; j++)
 	{
 		for( i = 0; i < w; i++)

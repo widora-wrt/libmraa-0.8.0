@@ -166,8 +166,6 @@ class Lcd
     {
         char w=25,h=25;
         int x,y;
-        printf("%d\n",data[0]);
-        printf("length=%d\n",length);
         for(x=0;x<8;x++)
         for(y=0;y<8;y++)
         {
