@@ -164,16 +164,17 @@ class Lcd
     Result
     drawDotarray(const uint8_t* data, int length,std::string colorf,std::string colorb)
     {
-        char w=25,h=25;
+        char w=28,h=28;
         int x,y;
+        printf("%s",colorf.c_str());
+        printf("%s",colorb.c_str());
         for(x=0;x<8;x++)
         for(y=0;y<8;y++)
         {
-            if(data[y]&(1<<x))mraa_lcd_drawrectfill(m_lcd,x*30,y*30+5,x*30+w,y*30+h+5,(int)strtol(colorf.c_str()+1,0, 16));
-            else mraa_lcd_drawrectfill(m_lcd,x*30,y*30+5,x*30+w,y*30+h+5,(int)strtol(colorb.c_str()+1,0, 16));
-
+            if(data[y]&(1<<x))mraa_lcd_drawrectfill(m_lcd,x*30+1,y*30+1,x*30+w+1,y*30+h+1,(int)strtol(colorf.c_str()+1,0, 16));
+            else mraa_lcd_drawrectfill(m_lcd,x*30+1,y*30+1,x*30+w+1,y*30+h+1,(int)strtol(colorb.c_str()+1,0, 16));
         }
-        return (Result)0;
+        return (Result)1;
     }
 
   private:
