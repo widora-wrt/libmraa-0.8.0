@@ -161,6 +161,13 @@ class Lcd
     {
         return (Result) mraa_lcd_writeline(m_lcd,(const char *)data.c_str());
     }
+    Result
+    writeDotarray(const uint8_t* data, int length)
+    {
+        printf("%d\n",data[0]);
+        printf("length=%d\n",length);
+        return (Result)0;
+    }
 
   private:
     mraa_lcd_context m_lcd;
