@@ -162,10 +162,19 @@ class Lcd
         return (Result) mraa_lcd_writeline(m_lcd,(const char *)data.c_str());
     }
     Result
-    writeDotarray(const uint8_t* data, int length)
+    drawDotarray(const uint8_t* data, int length,std::string colorf,std::string colorb)
     {
+        char w=25,h=25;
+        int x,y;
         printf("%d\n",data[0]);
         printf("length=%d\n",length);
+        for(x=0;x<8;x++)
+        for(y=0;y<8;y++)
+        {
+            if(data[y]&(1<<x))mraa_lcd_drawrectfill(m_lcd,x*30,y*30+5,x*30+w,y*30+h+5,(int)strtol(colorf.c_str()+1,0, 16));
+            else mraa_lcd_drawrectfill(m_lcd,x*30,y*30+5,x*30+w,y*30+h+5,(int)strtol(colorb.c_str()+1,0, 16));
+
+        }
         return (Result)0;
     }
 
