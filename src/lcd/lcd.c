@@ -540,3 +540,32 @@ mraa_lcd_writeline(mraa_lcd_context dev, const char* buf)
     system(cmd);
     return MRAA_SUCCESS;
 }
+mraa_result_t
+mraa_lcd_drawdotaraay(mraa_lcd_context dev,  uint8_t* data,int length,int cf,int cb)
+{
+    char w=28,h=28,g=29;
+    int x,y,sx=4,sy=5;
+    for(x=0;x<8;x++)
+    for(y=0;y<8;y++)
+    {
+        if(data[y]&(1<<x))mraa_lcd_drawrectfill(dev,x*g+sx,y*g+sy,x*g+w+sx,y*g+h+sy,cf);
+        else mraa_lcd_drawrectfill(dev,x*g+sx,y*g+sy,x*g+w+sx,y*g+h+sy,cb);
+    }
+    dev->dot_bcolor=cb;
+    dev->dot_fcolor=cf;
+    for(x=0;x<8;x++)dev->dotbuf[x]=data[x];
+    return MRAA_SUCCESS;
+}
+mraa_result_t
+mraa_lcd_drawdotaraaybit(mraa_lcd_context dev,int x,int y,char color)
+{
+    if(color>0)dev->dotbuf[y]|=(1<<x);
+    else dev->dotbuf[y]&=~(1<<x);
+    if(dev->dot_fcolor==dev->dot_bcolor)
+    {
+        dev->dot_fcolor=0xffff;
+        dev->dot_bcolor=0x0000;
+    }
+    return mraa_lcd_drawdotaraay(dev,dev->dotbuf,8,dev->dot_fcolor,dev->dot_bcolor);
+    
+}

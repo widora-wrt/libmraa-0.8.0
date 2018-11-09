@@ -135,6 +135,9 @@ struct _lcd {
     int bits_per_pixel;
     char *fbp;
     char *f16p;
+    unsigned char dotbuf[8];
+    int dot_fcolor;
+    int dot_bcolor;
     mraa_adv_func_t* advance_func; /**< override function table */
     /*@}*/
 };

@@ -164,16 +164,15 @@ class Lcd
     Result
     drawDotarray(const uint8_t* data, int length,std::string colorf,std::string colorb)
     {
-        char w=28,h=28,g=29;
-        int x,y,sx=4,sy=5;
-        for(x=0;x<8;x++)
-        for(y=0;y<8;y++)
-        {
-            if(data[y]&(1<<x))mraa_lcd_drawrectfill(m_lcd,x*g+sx,y*g+sy,x*g+w+sx,y*g+h+sy,mraa_lcd_rgb2tft((int)strtol(colorf.c_str()+1,0, 16)));
-            else mraa_lcd_drawrectfill(m_lcd,x*g+sx,y*g+sy,x*g+w+sx,y*g+h+sy,mraa_lcd_rgb2tft((int)strtol(colorb.c_str()+1,0, 16)));
-        }
-        return (Result)1;
+       
+       return (Result)mraa_lcd_drawdotaraay(m_lcd,(uint8_t* )data,length,mraa_lcd_rgb2tft((int)strtol(colorf.c_str()+1,0, 16)),mraa_lcd_rgb2tft((int)strtol(colorb.c_str()+1,0, 16)));
     }
+    Result
+    drawDotarraybit(float x,float y,bool color)
+    {
+       return (Result)mraa_lcd_drawdotaraaybit(m_lcd,x,y,(char)color);
+    }
+
 
   private:
     mraa_lcd_context m_lcd;
