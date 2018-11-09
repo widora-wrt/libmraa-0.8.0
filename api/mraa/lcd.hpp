@@ -172,7 +172,17 @@ class Lcd
     {
        return (Result)mraa_lcd_drawdotaraaybit(m_lcd,x,y,(char)color);
     }
-
+    Result
+    drawDotarray(float x,float y,bool color)
+    {
+       return (Result)mraa_lcd_drawdotaraaybit(m_lcd,x,y,(char)color);
+    }
+    Result
+    drawDotarraymove(float x,float y)
+    {
+       return (Result)mraa_lcd_drawdotaraaymove(m_lcd,x,y);
+    }
+    
 
   private:
     mraa_lcd_context m_lcd;

@@ -419,7 +419,7 @@ mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,
     unsigned short XX,i;
     FontTypeStruct Font;  
     int offset=0;
-	unsigned char *P=Str,w;
+	unsigned char *P=(unsigned char *)Str,w;
     Font=FontGetType(f);
     XX=X;
 	w=(Font.Witdh+4)/8;//+7是为了照顾宽度为6/12的字符
@@ -514,7 +514,7 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     int w ,h,i,j;
     int color;
 	unsigned char *imgbuf;
-	imgbuf = mraa_lcd_getjpg(dev,name,&w,&h);
+	imgbuf = mraa_lcd_getjpg(dev,(char *)name,&w,&h);
 	for(j = 0; j < h; j++)
 	{
 		for( i = 0; i < w; i++)
@@ -561,6 +561,50 @@ mraa_lcd_drawdotaraaybit(mraa_lcd_context dev,int x,int y,char color)
 {
     if(color>0)dev->dotbuf[y]|=(1<<x);
     else dev->dotbuf[y]&=~(1<<x);
+    if(dev->dot_fcolor==dev->dot_bcolor)
+    {
+        dev->dot_fcolor=0xffff;
+        dev->dot_bcolor=0x0000;
+    }
+    return mraa_lcd_drawdotaraay(dev,dev->dotbuf,8,dev->dot_fcolor,dev->dot_bcolor);
+    
+}
+
+mraa_result_t
+mraa_lcd_drawdotaraaymove(mraa_lcd_context dev,int x,int y)
+{
+    #define ROTATE_LEFT(x,  n) ((x) << (n)) | ((x) >> ((8*sizeof(x)) - (n)))
+    #define ROTATE_RIGHT(x,  n) ((x) >> (n)) | ((x) << ((8*sizeof(x)) - (n)))
+    int i,t;
+    if(y>0)
+    {
+        for(i=0;i<8;i++)
+        {
+            t=dev->dotbuf[i%8];
+            dev->dotbuf[i%8]=dev->dotbuf[(y+i)%8];
+            dev->dotbuf[(y+i)%8]=t;
+        }
+    }else if(y<0){
+        for(i=0;i<8;i++)
+        {
+            t=dev->dotbuf[(i-y)%8];
+            dev->dotbuf[(i-y)%8]=dev->dotbuf[i%8];
+            dev->dotbuf[i%8]=t;
+        }
+    }
+    if(x>0)
+    {
+        for(i=0;i<8;i++)
+        {
+            dev->dotbuf[i]=ROTATE_LEFT(dev->dotbuf[i],x);
+        }
+    }else if(x<0)
+    {
+        for(i=0;i<8;i++)
+        {
+            dev->dotbuf[i]=ROTATE_RIGHT(dev->dotbuf[i],0-x);
+        }
+    }
     if(dev->dot_fcolor==dev->dot_bcolor)
     {
         dev->dot_fcolor=0xffff;

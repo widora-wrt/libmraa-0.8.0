@@ -145,6 +145,7 @@ int mraa_lcd_read(mraa_lcd_context dev, char* buf, size_t length);
 mraa_result_t mraa_lcd_writeline(mraa_lcd_context dev, const char* buf);
 mraa_result_t mraa_lcd_drawdotaraay(mraa_lcd_context dev,  uint8_t* data,int length,int cf,int cb);
 mraa_result_t mraa_lcd_drawdotaraaybit(mraa_lcd_context dev,int x,int y,char color);
+mraa_result_t mraa_lcd_drawdotaraaymove(mraa_lcd_context dev,int x,int y);
 /**
  * Write bytes in buffer to a device
  *
