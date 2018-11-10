@@ -36,13 +36,13 @@ char get_time()
     struct tm *p;
     time(&timep);
     p = gmtime(&timep);
-    printf("%d ", p->tm_sec);
+   /* printf("%d ", p->tm_sec);
     printf("%d ", p->tm_min);
     printf("%d ", 8 + p->tm_hour);
     printf("%d ", p->tm_mday);
     printf("%d ", 1 + p->tm_mon);
     printf("%d ", 1900 + p->tm_year);
-    printf("%d\n", p->tm_yday);
+    printf("%d\n", p->tm_yday);*/
     if((1900 + p->tm_year)>2018){
         printf("timer error\n");
         return 1;

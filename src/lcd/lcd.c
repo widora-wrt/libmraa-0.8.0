@@ -492,8 +492,8 @@ unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, in
 	*w = cinfo.output_width;
 	*h = cinfo.output_height;
 	if ((cinfo.output_width > dev->xres) ||(cinfo.output_height > dev->yres)) {
-		printf("too large JPEG file,cannot display/n");
-		return 0;
+	//	printf("too large JPEG file,cannot display/n");
+	//	return 0;
 	}
 	buffer = (unsigned char *) malloc(cinfo.output_width *cinfo.output_components * cinfo.output_height);
 	temp = buffer;
