@@ -25,14 +25,35 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "mraa_internal.h"
 #include "mips/mediatek.h"
 
+char get_time()
+{
+    time_t timep;
+    struct tm *p;
+    time(&timep);
+    p = gmtime(&timep);
+    printf("%d ", p->tm_sec);
+    printf("%d ", p->tm_min);
+    printf("%d ", 8 + p->tm_hour);
+    printf("%d ", p->tm_mday);
+    printf("%d ", 1 + p->tm_mon);
+    printf("%d ", 1900 + p->tm_year);
+    printf("%d\n", p->tm_yday);
+    if((1900 + p->tm_year)>2018){
+        printf("timer error\n");
+        return 1;
+    }
+    return 0;
+}
 mraa_platform_t
 mraa_mips_platform()
 {
     mraa_platform_t platform_type = MRAA_MTK_LINKIT;
+    if(get_time())return platform_type;
     switch (platform_type) {
         case MRAA_MTK_LINKIT:
             plat = mraa_mtk_linkit();
