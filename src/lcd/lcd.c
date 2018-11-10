@@ -576,7 +576,7 @@ mraa_lcd_drawdotaraaymove(mraa_lcd_context dev,int x,int y)
     #define ROTATE_LEFT(x,  n) ((x) << (n)) | ((x) >> ((8*sizeof(x)) - (n)))
     #define ROTATE_RIGHT(x,  n) ((x) >> (n)) | ((x) << ((8*sizeof(x)) - (n)))
     int i,t;
-    uint8 temp[8];
+    unsigned char temp[8];
     if(y>0)
     {
         for(i=0;i<8;i++)temp[i]=dev->dotbuf[i];
