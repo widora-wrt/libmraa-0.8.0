@@ -201,6 +201,8 @@ mraa_result_t
 mraa_lcd_drawrectfill(mraa_lcd_context dev,unsigned int x1,unsigned int y1,unsigned int x2,unsigned int y2,unsigned short color)
 {
      int x = 0, y = 0;
+     x2++;
+     y2++;
      for(x=x1;x<x2;x++)
      for(y=y1;y<y2;y++)
      {
