@@ -545,7 +545,7 @@ mraa_lcd_writeline(mraa_lcd_context dev, const char* buf)
 mraa_result_t
 mraa_lcd_drawdotaraay(mraa_lcd_context dev,  uint8_t* data,int length,int cf,int cb)
 {
-    char w=28,h=28,g=29;
+    char w=27,h=27,g=29;
     int x,y,sx=4,sy=5;
     for(x=0;x<8;x++)
     for(y=0;y<8;y++)
@@ -585,7 +585,7 @@ mraa_lcd_drawdotaraaymove(mraa_lcd_context dev,int x,int y)
         for(i=0;i<8;i++)dev->dotbuf[(y+i)%8]=temp[i];
     }else if(y<0){
         for(i=0;i<8;i++)temp[i]=dev->dotbuf[i];
-        for(i=0;i<8;i++)dev->dotbuf[i]=temp[(y+i)%8];
+        for(i=0;i<8;i++)dev->dotbuf[i]=temp[(i-y)%8];
     }
     if(x>0)
     {
