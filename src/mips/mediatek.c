@@ -451,6 +451,7 @@ mraa_mtk_linkit()
     b->pins[1].gpio.pinmap = 1;
     gpio_mux_groups[1] = MUX_I2S;
 
+
     strncpy(b->pins[20].name, "GPIO20", MRAA_PIN_NAME_SIZE);
     b->pins[20].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
     b->pins[20].gpio.pinmap = 20;

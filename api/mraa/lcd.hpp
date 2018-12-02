@@ -177,7 +177,10 @@ class Lcd
     {
        return (Result)mraa_lcd_drawdotaraaymove(m_lcd,x,y);
     }
-    
+    char *screenShot()
+    {
+        return mraa_lcd_screenshotsave(m_lcd);
+    }
 
   private:
     mraa_lcd_context m_lcd;

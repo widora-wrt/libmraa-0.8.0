@@ -608,3 +608,53 @@ mraa_lcd_drawdotaraaymove(mraa_lcd_context dev,int x,int y)
     return mraa_lcd_drawdotaraay(dev,dev->dotbuf,8,dev->dot_fcolor,dev->dot_bcolor);
     
 }
+mraa_result_t mraa_lcd_screenshot(mraa_lcd_context dev,char * frame, unsigned short width, unsigned short height, FILE * fd, int quality)
+{
+  JSAMPROW row_ptr[1];
+  struct jpeg_compress_struct jpeg;
+  struct jpeg_error_mgr jerr;
+  char *line, *image;
+  int y, x, line_width;
+  line =(char *) malloc((width) * 3);
+  if (!line)return 0;
+  jpeg.err = jpeg_std_error (&jerr);
+  jpeg_create_compress (&jpeg);
+  jpeg.image_width = width;
+  jpeg.image_height= height;
+  jpeg.input_components = 3;
+  jpeg.in_color_space = JCS_RGB;
+  jpeg_set_defaults (&jpeg);
+  jpeg_set_quality (&jpeg, quality, TRUE);
+  jpeg.dct_method = JDCT_FASTEST;
+  jpeg_stdio_dest(&jpeg, fd);
+  jpeg_start_compress (&jpeg, TRUE);
+  row_ptr[0] = (JSAMPROW) line;
+  line_width = width*2;
+  image = (char *) frame ;
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
+      line[x*3]=image[x*2+1]&0xf8;
+      line[x*3+1]=(image[x*2+1]&0x7)<<5|(image[x*2]&0xe0)>>2;
+	  line[x*3+2]=(image[x*2]&0x1f)<<3;
+    }
+    if (!jpeg_write_scanlines (&jpeg, row_ptr, 1)) {
+      jpeg_destroy_compress (&jpeg);
+      free(line);
+      return 0;
+    }
+    image += line_width;
+  }
+  jpeg_finish_compress (&jpeg);
+  jpeg_destroy_compress (&jpeg);
+  free (line);
+  return MRAA_SUCCESS;
+}
+char * mraa_lcd_screenshotsave(mraa_lcd_context dev)
+{
+    FILE *infile;
+    char *name="/tmp/screenshot.jpg";
+    infile = fopen(name, "w");
+    mraa_lcd_screenshot(dev,dev->fbp,dev->xres,dev->yres,infile,100);
+    fclose(infile);
+    return name;
+}
