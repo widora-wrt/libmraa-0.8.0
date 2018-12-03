@@ -658,3 +658,14 @@ char * mraa_lcd_screenshotsave(mraa_lcd_context dev)
     fclose(infile);
     return name;
 }
+mraa_result_t mraa_lcd_screenshotdebug(mraa_lcd_context dev,char * name)
+{
+    FILE *fp; 
+    if((fp=fopen("/www/screenshot.jpg","w"))==NULL)
+    {
+        system("ln -s /tmp/screenshot.jpg /www/screenshot.jpg");
+    }else fclose(fp);
+    mraa_lcd_screenshotsave(dev);
+    printf("<br><img src='http://%s/screenshot.jpg'  alt='screenshot' />",name);
+    return MRAA_SUCCESS;
+}
