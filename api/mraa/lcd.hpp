@@ -182,7 +182,7 @@ class Lcd
         return mraa_lcd_screenshotsave(m_lcd);
     }
     Result
-    screenShotdebug(std::string data)
+    screenShotdebug(std::string data,int length)
     {
        
        return (Result)mraa_lcd_screenshotdebug(m_lcd,(char *)data.c_str());
