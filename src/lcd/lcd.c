@@ -45,6 +45,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <jpeglib.h>
+#include<sys/time.h>
 #include <jerror.h> 
 #include "lcd.h"
 #include "mraa_internal.h"
@@ -661,11 +662,15 @@ char * mraa_lcd_screenshotsave(mraa_lcd_context dev)
 mraa_result_t mraa_lcd_screenshotdebug(mraa_lcd_context dev,char * name)
 {
     FILE *fp; 
-    if((fp=fopen("/www/screenshot.jpg","w"))==NULL)
-    {
+    struct timeval time_now = {0};
+    long time_mic = 0;//1微秒 = 1毫秒/1000
+    gettimeofday(&time_now,NULL);
+    time_mic = time_now.tv_sec*1000*1000 + time_now.tv_usec;
+     if((access("/www/screenshot.jpg",F_OK))!=-1)
+     {   
         system("ln -s /tmp/screenshot.jpg /www/screenshot.jpg");
-    }else fclose(fp);
+     }
     mraa_lcd_screenshotsave(dev);
-    printf("<br><img src='http://%s/screenshot.jpg'  alt='screenshot' />",name);
+    printf("<br><img src='http://%s/screenshot.jpg?tags=%d'  alt='screenshot' />",name,time_mic);
     return MRAA_SUCCESS;
 }
