@@ -671,6 +671,6 @@ mraa_result_t mraa_lcd_screenshotdebug(mraa_lcd_context dev,char * name)
         system("ln -s /tmp /www/tmp");
      }
     mraa_lcd_screenshotsave(dev);
-    printf("<br><img src='http://%s/screenshot.jpg'  alt='screenshot%d' />",name,time_mic);
+    printf("<br><img src='http://%s/tmp/screenshot.jpg?%d'  alt='screenshot' />",name,time_mic);
     return MRAA_SUCCESS;
 }
