@@ -666,9 +666,9 @@ mraa_result_t mraa_lcd_screenshotdebug(mraa_lcd_context dev,char * name)
     long time_mic = 0;//1微秒 = 1毫秒/1000
     gettimeofday(&time_now,NULL);
     time_mic = time_now.tv_sec*1000*1000 + time_now.tv_usec;
-     if((access("/www/screenshot.jpg",F_OK))!=-1)
+     if((access("/www/tmp",F_OK))==-1)
      {   
-        system("ln -s /tmp/screenshot.jpg /www/screenshot.jpg");
+        system("ln -s /tmp /www/tmp");
      }
     mraa_lcd_screenshotsave(dev);
     printf("<br><img src='http://%s/screenshot.jpg'  alt='screenshot%d' />",name,time_mic);
