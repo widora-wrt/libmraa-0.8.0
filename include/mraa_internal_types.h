@@ -139,6 +139,7 @@ struct _lcd {
     int dot_fcolor;
     int dot_bcolor;
     char stream_run;
+    pthread_t serverthread;
     mraa_adv_func_t* advance_func; /**< override function table */
     /*@}*/
 };

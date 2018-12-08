@@ -788,15 +788,40 @@ char *mraa_lcd_getfile(char *name,int *l)
 void *mraa_lcd_server_thread(void *arg)
 {
     fbtreadstream fs;
-    int on=1;
-	struct sockaddr_storage client_addr;
+    char buff[MAXLINE];
+    int z=10;
+    struct sockaddr_storage client_addr;
     socklen_t addr_len = sizeof(struct sockaddr_storage);
-	int listenfd;
-	struct sockaddr_in sockaddr;
-	char buff[MAXLINE];
     memcpy(&fs, arg, sizeof(fbtreadstream));
     mraa_lcd_context dev=(mraa_lcd_context)fs.dev;
     free(arg);
+	while(dev->stream_run)
+	{
+		pthread_t client;
+        fbtreadstream *fc = malloc(sizeof(fbtreadstream));
+        fc->dev=dev;
+		if((fc->treadfd = accept(fs.treadfd,(struct sockaddr *)&client_addr, &addr_len))==-1)
+		{
+			printf("accpet socket error: %s errno :%d\n",strerror(errno),errno);
+            free(fc);
+			continue;
+		}
+		printf("create \r\n");
+		fflush(stdout);
+		pthread_create(&client, NULL, &mraa_lcd_client_thread,fc);
+		pthread_detach(client);
+		printf("over");
+		fflush(stdout);
+	}
+ 	printf("ok");
+    close(fs.treadfd);
+}
+ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev)
+ {
+    int on=1;
+    
+	int listenfd;
+	struct sockaddr_in sockaddr;
 	memset(&sockaddr,0,sizeof(sockaddr));
 	sockaddr.sin_family = AF_INET;
 	sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -810,34 +835,11 @@ void *mraa_lcd_server_thread(void *arg)
 	bind(listenfd,(struct sockaddr *) &sockaddr,sizeof(sockaddr));
 	listen(listenfd,1024);
 	printf("Wait for the client information\n");
-	int z=10;
+    fbtreadstream *fs = malloc(sizeof(fbtreadstream));
+    fs->dev=dev;
+    fs->treadfd=listenfd;
     dev->stream_run=1;
-	while(dev->stream_run)
-	{
-		pthread_t client;
-        fbtreadstream *fs = malloc(sizeof(fbtreadstream));
-        fs->dev=dev;
-		if((fs->treadfd = accept(listenfd,(struct sockaddr *)&client_addr, &addr_len))==-1)
-		{
-			printf("accpet socket error: %s errno :%d\n",strerror(errno),errno);
-            free(fs);
-			continue;
-		}
-		printf("create \r\n");
-		fflush(stdout);
-		pthread_create(&client, NULL, &mraa_lcd_client_thread,fs);
-		pthread_detach(client);
-		printf("over");
-		fflush(stdout);
-	}
- 	printf("ok");
-    close(listenfd);
-}
- mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev)
- {
-    pthread_t client;
-    fbtreadstream fs;
-    fs.dev=dev;
-    pthread_create(&client, NULL, &mraa_lcd_server_thread,&fs);
+    pthread_create(&dev->serverthread, NULL, &mraa_lcd_server_thread,fs);
+    //pthread_detach(dev->serverthread);
 	return MRAA_SUCCESS; 
  }
