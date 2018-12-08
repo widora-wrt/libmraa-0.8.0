@@ -840,6 +840,6 @@ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
     fs->treadfd=listenfd;
     dev->stream_run=1;
     pthread_create(&dev->serverthread, NULL, &mraa_lcd_server_thread,fs);
-    printf("<br><img src='http://%s:15000'  alt='screenshot' />",name);
+    //printf("<br><img src='http://%s:15000'  alt='screenshot' />",name);
 	return MRAA_SUCCESS; 
  }
