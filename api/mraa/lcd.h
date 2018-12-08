@@ -148,6 +148,7 @@ mraa_result_t mraa_lcd_drawdotaraaybit(mraa_lcd_context dev,int x,int y,char col
 mraa_result_t mraa_lcd_drawdotaraaymove(mraa_lcd_context dev,int x,int y);
 char * mraa_lcd_screenshotsave(mraa_lcd_context dev);
 mraa_result_t mraa_lcd_screenshotdebug(mraa_lcd_context dev,char * name);
+mraa_result_t mraa_lcd_screenprevie(mraa_lcd_context dev,char * name);
 /**
  * Write bytes in buffer to a device
  *

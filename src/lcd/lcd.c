@@ -674,3 +674,18 @@ mraa_result_t mraa_lcd_screenshotdebug(mraa_lcd_context dev,char * name)
     printf("<br><img src='http://%s/tmp/screenshot.jpg?%d'  alt='screenshot' />",name,time_mic);
     return MRAA_SUCCESS;
 }
+mraa_result_t mraa_lcd_screenprevie(mraa_lcd_context dev,char * name)
+{
+    FILE *fp; 
+    struct timeval time_now = {0};
+    long time_mic = 0;//1微秒 = 1毫秒/1000
+    gettimeofday(&time_now,NULL);
+    time_mic = time_now.tv_sec*1000*1000 + time_now.tv_usec;
+     if((access("/www/tmp",F_OK))==-1)
+     {   
+        system("ln -s /tmp /www/tmp");
+     }
+    mraa_lcd_screenshotsave(dev);
+    printf("<br><img src='http://%s/tmp/screenshot.jpg?%d'  alt='screenshot' />",name,time_mic);
+    return MRAA_SUCCESS;
+}
