@@ -188,9 +188,9 @@ class Lcd
        return (Result)mraa_lcd_screenshotdebug(m_lcd,(char *)data.c_str());
     }
     Result
-    screenPrevie()
+    screenPrevie(std::string data)
     {
-        return (Result)mraa_lcd_screenstream(m_lcd);
+        return (Result)mraa_lcd_screenstream(m_lcd,(char *)data.c_str());
     }
   private:
     mraa_lcd_context m_lcd;

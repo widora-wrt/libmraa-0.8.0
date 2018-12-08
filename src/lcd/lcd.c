@@ -764,7 +764,6 @@ char *mraa_lcd_getfile(char *name,int *l)
     if(write(fs.treadfd, buffer, strlen(buffer)) < 0) {
 		printf("error");
     }
-   int z=0;
    while(dev->stream_run)
    {
     mraa_lcd_screenshotsave(dev);
@@ -780,7 +779,6 @@ char *mraa_lcd_getfile(char *name,int *l)
     sprintf(buffer, "\r\n--" BOUNDARY "\r\n");
     write(fs.treadfd, buffer, strlen(buffer));
 	sleep(1);
-	printf("write code.jpg\r\n");
 	fflush(stdout);
    }
 	 close(fs.treadfd);
@@ -806,17 +804,14 @@ void *mraa_lcd_server_thread(void *arg)
             free(fc);
 			continue;
 		}
-		printf("create \r\n");
 		fflush(stdout);
 		pthread_create(&client, NULL, &mraa_lcd_client_thread,fc);
 		pthread_detach(client);
-		printf("over");
 		fflush(stdout);
 	}
- 	printf("ok");
     close(fs.treadfd);
 }
- mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev)
+ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
  {
     int on=1;
     
@@ -840,6 +835,7 @@ void *mraa_lcd_server_thread(void *arg)
     fs->treadfd=listenfd;
     dev->stream_run=1;
     pthread_create(&dev->serverthread, NULL, &mraa_lcd_server_thread,fs);
-    //pthread_detach(dev->serverthread);
+    pthread_detach(dev->serverthread);
+    printf("<br><img src='http://%s:15000'  alt='screenshot' />",name);
 	return MRAA_SUCCESS; 
  }
