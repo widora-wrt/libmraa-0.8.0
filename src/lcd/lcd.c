@@ -835,7 +835,6 @@ void *mraa_lcd_server_thread(void *arg)
     fs->treadfd=listenfd;
     dev->stream_run=1;
     pthread_create(&dev->serverthread, NULL, &mraa_lcd_server_thread,fs);
-    pthread_detach(dev->serverthread);
     printf("<br><img src='http://%s:15000'  alt='screenshot' />",name);
 	return MRAA_SUCCESS; 
  }
