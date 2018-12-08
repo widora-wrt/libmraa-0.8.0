@@ -138,6 +138,7 @@ struct _lcd {
     unsigned char dotbuf[8];
     int dot_fcolor;
     int dot_bcolor;
+    char stream_run;
     mraa_adv_func_t* advance_func; /**< override function table */
     /*@}*/
 };

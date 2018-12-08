@@ -50,6 +50,32 @@
 #include "lcd.h"
 #include "mraa_internal.h"
 
+ #include <sys/socket.h>
+ #include <sys/types.h>
+ #include <string.h>
+ #include <netinet/in.h>
+ #include <stdlib.h>
+ #include <errno.h>
+ #include <unistd.h>
+ #include <arpa/inet.h>
+ #include <sys/time.h>
+ #include <pthread.h>
+#define MAXLINE 1024
+ 
+
+#define IO_BUFFER 256
+#define BOUNDARY "boundarydonotcross"
+#define STD_HEADER "Connection: close\r\n" \
+    "Server: MJPG-Streamer/0.2\r\n" \
+    "Cache-Control: no-store, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0\r\n" \
+    "Pragma: no-cache\r\n" \
+    "Expires: Mon, 3 Jan 2000 12:34:56 GMT\r\n"
+
+typedef struct {
+    int treadfd;           
+    mraa_lcd_context dev;
+} fbtreadstream;
+
 static mraa_lcd_context
 mraa_lcd_init_internal(mraa_adv_func_t* func_table)
 {
@@ -353,6 +379,7 @@ mraa_lcd_stop(mraa_lcd_context dev)
         syslog(LOG_ERR, "lcd: stop: context is NULL");
         return MRAA_ERROR_INVALID_HANDLE;
     }
+    dev->stream_run=0;
 	if(dev->f16p!=NULL)
 	{
         free(dev->f16p);
@@ -686,6 +713,123 @@ mraa_result_t mraa_lcd_screenprevie(mraa_lcd_context dev,char * name)
         system("ln -s /tmp /www/tmp");
      }
     mraa_lcd_screenshotsave(dev);
-    printf("<br><img src='http://%s/tmp/screenshot.jpg?%d'  alt='screenshot' />",name,time_mic);
+    printf("%s,%d",name,time_mic);
     return MRAA_SUCCESS;
 }
+
+
+
+char *mraa_lcd_getfile(char *name,int *l)
+{
+	FILE*fp;
+	char *p; 
+	int flen;
+	fp=fopen(name,"rb");
+	fseek(fp,0L,SEEK_END);   
+	flen=ftell(fp);
+    *l=flen;	
+	p=(char *)malloc(flen+1);  
+	if(p==NULL)  
+	{  
+	fclose(fp);  
+	return 0;  
+	}  
+	fseek(fp,0L,SEEK_SET); 
+	fread(p,flen,1,fp);  
+	return p;
+}
+
+ void *mraa_lcd_client_thread(void *arg)
+ {
+	 int n;
+	 struct timeval timestamp;
+	 char *file;
+	 int length;
+	 char buff[MAXLINE];
+     fbtreadstream fs;
+     memcpy(&fs, arg, sizeof(fbtreadstream));
+     mraa_lcd_context dev=(mraa_lcd_context)fs.dev;
+     free(arg);
+	 n = recv(fs.treadfd,buff,MAXLINE,0);
+	 buff[n] = '\0';
+     printf("recv:%s",buff);
+     printf("length=%d\n",length);
+	 char buffer[10240] = {0};
+	 sprintf(buffer, "HTTP/1.0 200 OK\r\n" \
+            STD_HEADER \
+            "Content-Type: multipart/x-mixed-replace;boundary=" BOUNDARY "\r\n" \
+            "\r\n" \
+            "--" BOUNDARY "\r\n");
+
+    if(write(fs.treadfd, buffer, strlen(buffer)) < 0) {
+		printf("error");
+    }
+   int z=0;
+   while(dev->stream_run)
+   {
+    mraa_lcd_screenshotsave(dev);
+	file=mraa_lcd_getfile("/tmp/screenshot.jpg",&length);
+	gettimeofday(&timestamp,NULL);
+	sprintf(buffer, "Content-Type: image/jpeg\r\n" \
+                "Content-Length: %d\r\n" \
+                "X-Timestamp: %d.%06d\r\n" \
+                "\r\n", length, (int)timestamp.tv_sec, (int)timestamp.tv_usec);
+    write(fs.treadfd, buffer, strlen(buffer));
+	write(fs.treadfd, file, length);
+	free(file);
+    sprintf(buffer, "\r\n--" BOUNDARY "\r\n");
+    write(fs.treadfd, buffer, strlen(buffer));
+	sleep(1);
+	printf("write code.jpg\r\n");
+	fflush(stdout);
+   }
+	 close(fs.treadfd);
+ }
+ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev)
+ {
+	
+	int on=1;
+	struct sockaddr_storage client_addr;
+    socklen_t addr_len = sizeof(struct sockaddr_storage);
+	int listenfd;
+	struct sockaddr_in sockaddr;
+	char buff[MAXLINE];
+	int n;
+	setbuf(stdout,NULL);
+	memset(&sockaddr,0,sizeof(sockaddr));
+	sockaddr.sin_family = AF_INET;
+	sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	sockaddr.sin_port = htons(15000);
+	listenfd = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
+ 	if(listenfd<0)return 0;
+   	if(setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) < 0) 
+	{
+            perror("setsockopt(SO_REUSEADDR) failed");
+    }
+	bind(listenfd,(struct sockaddr *) &sockaddr,sizeof(sockaddr));
+	listen(listenfd,1024);
+	printf("Wait for the client information\n");
+	int z=10;
+    dev->stream_run=1;
+	while(dev->stream_run)
+	{
+		pthread_t client;
+        fbtreadstream *fs = malloc(sizeof(fbtreadstream));;
+        fs->dev=dev;
+		if((fs->treadfd = accept(listenfd,(struct sockaddr *)&client_addr, &addr_len))==-1)
+		{
+			printf("accpet socket error: %s errno :%d\n",strerror(errno),errno);
+            free(fs);
+			continue;
+		}
+		printf("create \r\n");
+		fflush(stdout);
+		pthread_create(&client, NULL, &mraa_lcd_client_thread,fs);
+		pthread_detach(client);
+		printf("over");
+		fflush(stdout);
+	}
+ 	printf("ok");
+    close(listenfd);
+	return 0; 
+ }
