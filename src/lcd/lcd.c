@@ -794,7 +794,7 @@ char *mraa_lcd_getfile(char *name,int *l)
         free(file);
         return;
     }
-	usleep(300000);
+	usleep(100000);
    }
    if(file)free(file);
    close(fs.treadfd);
@@ -842,7 +842,6 @@ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
     }
 	bind(listenfd,(struct sockaddr *) &sockaddr,sizeof(sockaddr));
 	listen(listenfd,1024);
-	printf("Wait for the client information\n");
     fbtreadstream *fs = malloc(sizeof(fbtreadstream));
     fs->dev=dev;
     fs->treadfd=listenfd;
