@@ -780,8 +780,6 @@ char *mraa_lcd_getfile(char *name,int *l)
     sprintf(buffer, "\r\n--" BOUNDARY "\r\n");
     write(fs.treadfd, buffer, strlen(buffer));
 	sleep(1);
-	//printf("write code.jpg\r\n");
-	fflush(stdout);
    }
 	 close(fs.treadfd);
  }
@@ -802,18 +800,12 @@ void *mraa_lcd_server_thread(void *arg)
         fc->dev=dev;
 		if((fc->treadfd = accept(fs.treadfd,(struct sockaddr *)&client_addr, &addr_len))==-1)
 		{
-	//		printf("accpet socket error: %s errno :%d\n",strerror(errno),errno);
             free(fc);
 			continue;
 		}
-	//	printf("create \r\n");
-		fflush(stdout);
 		pthread_create(&client, NULL, &mraa_lcd_client_thread,fc);
 		pthread_detach(client);
-	//	printf("over");
-		fflush(stdout);
 	}
- 	//printf("ok");
     close(fs.treadfd);
 }
 mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
