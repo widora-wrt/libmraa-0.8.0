@@ -743,7 +743,7 @@ char *mraa_lcd_getfile(char *name,int *l)
  {
 	 int n;
 	 struct timeval timestamp;
-	 char *file;
+	 char *file=0;
 	 int length;
 	 char buff[MAXLINE];
      fbtreadstream fs;
@@ -762,7 +762,7 @@ char *mraa_lcd_getfile(char *name,int *l)
             "--" BOUNDARY "\r\n");
 
     if(write(fs.treadfd, buffer, strlen(buffer)) < 0) {
-	//	printf("error");
+	return;
     }
    int z=0;
    while(dev->stream_run)
@@ -774,14 +774,30 @@ char *mraa_lcd_getfile(char *name,int *l)
                 "Content-Length: %d\r\n" \
                 "X-Timestamp: %d.%06d\r\n" \
                 "\r\n", length, (int)timestamp.tv_sec, (int)timestamp.tv_usec);
-    write(fs.treadfd, buffer, strlen(buffer));
-	write(fs.treadfd, file, length);
-	free(file);
+    if(write(fs.treadfd, buffer, strlen(buffer))<0)
+    {
+        close(fs.treadfd);
+        free(file);
+        return;
+    }
+	if(write(fs.treadfd, file, length)<0)
+    {
+        close(fs.treadfd);
+        free(file);
+        return;
+    }
+	
     sprintf(buffer, "\r\n--" BOUNDARY "\r\n");
-    write(fs.treadfd, buffer, strlen(buffer));
-	sleep(1);
+    if(write(fs.treadfd, buffer, strlen(buffer))<0)
+    {
+        close(fs.treadfd);
+        free(file);
+        return;
+    }
+	usleep(300000);
    }
-	 close(fs.treadfd);
+   if(file)free(file);
+   close(fs.treadfd);
  }
 void *mraa_lcd_server_thread(void *arg)
 {
