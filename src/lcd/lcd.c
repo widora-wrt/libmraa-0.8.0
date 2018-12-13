@@ -599,7 +599,11 @@ mraa_lcd_drawdotaraaybit(mraa_lcd_context dev,int x,int y,char color)
     return mraa_lcd_drawdotaraay(dev,dev->dotbuf,8,dev->dot_fcolor,dev->dot_bcolor);
     
 }
-
+mraa_boolean_t
+mraa_lcd_getdotaraaybit(mraa_lcd_context dev,int x,int y)
+{
+    return dev->dotbuf[y]&&(1<<x);
+}
 mraa_result_t
 mraa_lcd_drawdotaraaymove(mraa_lcd_context dev,int x,int y)
 {

@@ -177,6 +177,11 @@ class Lcd
     {
        return (Result)mraa_lcd_drawdotaraaymove(m_lcd,x,y);
     }
+    bool 
+    dotGetdotarraybit(float x,float y)
+    {
+        return (Result)mraa_lcd_getdotaraaybit(m_lcd,x,y);
+    }
     char *screenShot()
     {
         return mraa_lcd_screenshotsave(m_lcd);
