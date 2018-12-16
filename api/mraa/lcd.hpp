@@ -183,7 +183,7 @@ class Lcd
        return (Result)mraa_lcd_drawdotaraaymove(m_lcd,x,y);
     }
     bool 
-    Getdotarraybit(float x,float y)
+    getDotarraybit(float x,float y)
     {
         return (bool)mraa_lcd_getdotaraaybit(m_lcd,x,y);
     }
