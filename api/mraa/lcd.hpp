@@ -87,6 +87,11 @@ class Lcd
     {
         return (Result) mraa_lcd_drawdot(m_lcd, x, y,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
     }
+    int
+    getDot(float x, float y)
+    {
+        return (int) mraa_lcd_getdot(m_lcd, x, y);
+    }
     Result
     drawLine(float x1, float y1,float x2, float y2,std::string colors)
     {
@@ -178,9 +183,9 @@ class Lcd
        return (Result)mraa_lcd_drawdotaraaymove(m_lcd,x,y);
     }
     bool 
-    dotGetdotarraybit(float x,float y)
+    Getdotarraybit(float x,float y)
     {
-        return (Result)mraa_lcd_getdotaraaybit(m_lcd,x,y);
+        return (bool)mraa_lcd_getdotaraaybit(m_lcd,x,y);
     }
     char *screenShot()
     {
