@@ -187,6 +187,11 @@ class Lcd
     {
         return (bool)mraa_lcd_getdotaraaybit(m_lcd,x,y);
     }
+    Result 
+    selectArraryDot(float x,float y,std::string colors)
+    {
+        return mraa_lcd_selectaraaydot(m_lcd,x,y,mraa_lcd_rgb2tft((int)strtol(colors.c_str()+1,0, 16)));
+    }
     char *screenShot()
     {
         return mraa_lcd_screenshotsave(m_lcd);

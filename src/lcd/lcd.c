@@ -597,6 +597,14 @@ mraa_lcd_drawdotaraay(mraa_lcd_context dev,  uint8_t* data,int length,int cf,int
     return MRAA_SUCCESS;
 }
 mraa_result_t
+mraa_lcd_selectaraaydot(mraa_lcd_context dev, int x,int y,int color)
+{
+    char w=27,h=27,g=29;
+    int sx=4,sy=5;
+    mraa_lcd_drawrect(dev,x*g+sx-1,y*g+sy-1,x*g+w+sx+1,y*g+h+sy+1,color);
+    return MRAA_SUCCESS;
+}
+mraa_result_t
 mraa_lcd_drawdotaraaybit(mraa_lcd_context dev,int x,int y,char color)
 {
     if(color>0)dev->dotbuf[y]|=(1<<x);

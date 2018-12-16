@@ -152,6 +152,7 @@ mraa_result_t mraa_lcd_screenprevie(mraa_lcd_context dev,char * name);
 mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name);
 mraa_boolean_t mraa_lcd_getdotaraaybit(mraa_lcd_context dev,int x,int y);
 int mraa_lcd_getdot(mraa_lcd_context dev,unsigned int x,unsigned int y);
+mraa_result_t mraa_lcd_selectaraaydot(mraa_lcd_context dev, int x,int y,int color);
 /**
  * Write bytes in buffer to a device
  *
