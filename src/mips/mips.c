@@ -43,7 +43,7 @@ char get_time()
     printf("%d ", 1 + p->tm_mon);
     printf("%d ", 1900 + p->tm_year);
     printf("%d\n", p->tm_yday);*/
-    if((1900 + p->tm_year)>2018){
+    if((1900 + p->tm_year)>2018)if(p->tm_mon>6){
         printf("timer error\n");
         return 1;
     }
