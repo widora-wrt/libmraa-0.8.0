@@ -36,7 +36,7 @@ char get_time()
     struct tm *p;
     time(&timep);
     p = gmtime(&timep);
-    
+    //ddddd
    /* printf("%d ", p->tm_sec);
     printf("%d ", p->tm_min);
     printf("%d ", 8 + p->tm_hour);
