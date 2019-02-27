@@ -136,6 +136,11 @@ class Lcd
     {
         return (Result) mraa_lcd_drawjpg(m_lcd,x,y,(const unsigned char *)data.c_str());
     }
+    Result
+    drawPng(float x,float y,std::string data)
+    {
+        return (Result) mraa_lcd_drawpng(m_lcd,x,y,(const unsigned char *)data.c_str());
+    }
     /**
      * Read bytes from the device into char* buffer
      *

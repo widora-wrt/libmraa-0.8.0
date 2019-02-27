@@ -45,6 +45,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <jpeglib.h>
+#include <png.h>
 #include<sys/time.h>
 #include <jerror.h> 
 #include "lcd.h"
@@ -569,6 +570,43 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
 	}
     free(imgbuf);
     return MRAA_SUCCESS;
+}
+
+mraa_result_t
+mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name)
+{
+    int i,j;
+    int color;
+    unsigned char alpha;
+    FILE* file = fopen(name, "rb");
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+    setjmp(png_jmpbuf(png_ptr));
+    png_init_io(png_ptr, file);
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, 0);
+    int m_width = png_get_image_width(png_ptr, info_ptr);
+    int m_height = png_get_image_height(png_ptr, info_ptr);
+    int color_type = png_get_color_type(png_ptr, info_ptr);
+    int size = m_height * m_width * 4;
+    unsigned char* bgra = malloc(size);
+    int pos = 0;
+    png_bytep* row_pointers = png_get_rows(png_ptr, info_ptr);
+    for(i = 0; i < m_height; i++)
+    {
+        for(j = 0; j < (4 * m_width); j += 4)
+        {
+            alpha=row_pointers[i][j + 3];
+            color= (row_pointers[i][j]*alpha/255);
+            color<<=8;
+			color|=(row_pointers[i][j + 1]*alpha/255);
+            color<<=8;
+			color|=(row_pointers[i][j+2]*alpha/255);
+            if(row_pointers[i][j + 3]>200)draw_dot(j/4,i,RGB8882RGB565(color));
+        }
+    }
+    png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+    fclose(file);
+    free(bgra);
 }
 mraa_result_t
 mraa_lcd_writeline(mraa_lcd_context dev, const char* buf)

@@ -141,6 +141,7 @@ mraa_result_t mraa_drawfont_ascii(mraa_lcd_context dev,unsigned short f,unsigned
 mraa_result_t mraa_lcd_drawfont_string(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const unsigned char *Str,unsigned short f_color,unsigned short b_color,unsigned short a_color);
 mraa_result_t mraa_drawfont_word(mraa_lcd_context dev,unsigned short f,unsigned short X,unsigned short Y,const unsigned char *word,unsigned short f_color,unsigned short b_color,unsigned short a_color);
 mraa_result_t mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name);
+mraa_result_t mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name);
 int mraa_lcd_read(mraa_lcd_context dev, char* buf, size_t length);
 mraa_result_t mraa_lcd_writeline(mraa_lcd_context dev, const char* buf);
 mraa_result_t mraa_lcd_drawdotaraay(mraa_lcd_context dev,  uint8_t* data,int length,int cf,int cb);
