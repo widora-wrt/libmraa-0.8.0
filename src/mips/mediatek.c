@@ -523,10 +523,15 @@ mraa_mtk_linkit()
     b->pins[42].gpio.pinmap = 42;
     gpio_mux_groups[42] = MUX_GPIO;
 
+    strncpy(b->pins[43].name, "GPIO43", MRAA_PIN_NAME_SIZE);
+    b->pins[43].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
+    b->pins[43].gpio.pinmap = 43;
+    gpio_mux_groups[43] = MUX_GPIO;
+
     strncpy(b->pins[44].name, "GPIO44", MRAA_PIN_NAME_SIZE);
     b->pins[44].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 0 };
     b->pins[44].gpio.pinmap = 44;
-    gpio_mux_groups[44] = MUX_WLED;
+    gpio_mux_groups[44] = MUX_GPIO;
 
     strncpy(b->pins[46].name, "GPIO46", MRAA_PIN_NAME_SIZE);
     b->pins[46].capabilites = (mraa_pincapabilities_t){ 1, 1, 0, 0, 0, 0, 0, 1 };
