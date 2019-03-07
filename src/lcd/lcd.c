@@ -571,13 +571,16 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     free(imgbuf);
     return MRAA_SUCCESS;
 }
-
+#define RGB565_MASK_RED        0xF800  
+#define RGB565_MASK_GREEN    0x07E0  
+#define RGB565_MASK_BLUE       0x001F  
 mraa_result_t
 mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name)
 {
     int i,j;
     int color;
     unsigned char alpha;
+    unsigned short tc;
     FILE* file = fopen(name, "rb");
     png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     png_infop info_ptr = png_create_info_struct(png_ptr);
@@ -595,13 +598,14 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     {
         for(j = 0; j < (4 * m_width); j += 4)
         {
+            tc=mraa_lcd_getdot(dev,j/4+x,i+y);
             alpha=row_pointers[i][j + 3];
-            color= (row_pointers[i][j]*alpha/255);
+            color= (row_pointers[i][j]*alpha/255)+((tc&RGB565_MASK_RED)>>8)*(255-alpha)/255;
             color<<=8;
-			color|=(row_pointers[i][j + 1]*alpha/255);
+			color|=(row_pointers[i][j + 1]*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
             color<<=8;
-			color|=(row_pointers[i][j+2]*alpha/255);
-            if(row_pointers[i][j + 3]>200)draw_dot(j/4,i,RGB8882RGB565(color));
+			color|=(row_pointers[i][j+2]*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
+            draw_dot(dev,j/4+x,i+y,RGB8882RGB565(color));
         }
     }
     png_destroy_read_struct(&png_ptr, &info_ptr, 0);
@@ -910,3 +914,9 @@ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
     printf("<br><img src='http://%s:15000'  alt='screenshot' />",name);
 	return MRAA_SUCCESS; 
  }
+ mraa_result_t
+ mraa_lcd_drawpic(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name)
+{
+   if(strcmp(name, ".jpg") == 0)return mraa_lcd_drawjpg(dev,x,y,name);
+   if(strcmp(name, ".png") == 0)return mraa_lcd_drawpng(dev,x,y,name);
+}
