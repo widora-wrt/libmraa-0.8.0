@@ -601,6 +601,7 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
         for(j = 0; j < (4 * m_width); j += 4)
         {
             tc=mraa_lcd_getdot(dev,j/4+x,i+y);
+            printf("tc=%d\r\n",tc);
             alpha=row_pointers[i][j + 3];
             color= (row_pointers[i][j]*alpha/255)+((tc&RGB565_MASK_RED)>>8)*(255-alpha)/255;
             color<<=8;
