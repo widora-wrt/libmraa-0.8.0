@@ -591,6 +591,7 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     int m_height = png_get_image_height(png_ptr, info_ptr);
     int color_type = png_get_color_type(png_ptr, info_ptr);
     int size = m_height * m_width * 4;
+    printf("size=%d",size);
     unsigned char* bgra = malloc(size);
     int pos = 0;
     png_bytep* row_pointers = png_get_rows(png_ptr, info_ptr);
