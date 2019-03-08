@@ -593,9 +593,9 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     int color_type = png_get_color_type(png_ptr, info_ptr);
     int size = m_height * m_width * 4;
     printf("size=%d\r\n",size);
-    unsigned char* bgra = malloc(size);
     int pos = 0;
     png_bytep* row_pointers = png_get_rows(png_ptr, info_ptr);
+    printf("row_pointers=%d\r\n",row_pointers);
     for(i = 0; i < m_height; i++)
     {
         for(j = 0; j < (4 * m_width); j += 4)
@@ -613,7 +613,6 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     }
     png_destroy_read_struct(&png_ptr, &info_ptr, 0);
     fclose(file);
-    free(bgra);
     return MRAA_SUCCESS;
 }
 mraa_result_t
