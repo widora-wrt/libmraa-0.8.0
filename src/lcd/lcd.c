@@ -180,10 +180,10 @@ mraa_lcd_drawdot(mraa_lcd_context dev,unsigned int x,unsigned int y,unsigned sho
     *((unsigned short int*)(dev->fbp + location)) =color;
     return MRAA_SUCCESS;
 }
-int
+unsigned short
 mraa_lcd_getdot(mraa_lcd_context dev,unsigned int x,unsigned int y)
 {
-    int color;
+    unsigned short color;
     if(x>=dev->xres)return 0;
 	if(y>=dev->yres)return 0;
     long int location = (x+dev->xoffset) * (dev->bits_per_pixel/8) +(y+dev->yoffset) *  dev->line_length;
@@ -605,7 +605,7 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
             alpha=row_pointers[i][j + 3];
             color= (row_pointers[i][j]*alpha/255)+((tc&RGB565_MASK_RED)>>8)*(255-alpha)/255;
             color<<=8;
-			color|=(row_pointers[i][j + 1]*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
+			color|=(row_pointers[i][j+1]*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
             color<<=8;
 			color|=(row_pointers[i][j+2]*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
             mraa_lcd_drawdot(dev,j/4+x,i+y,RGB8882RGB565(color));
