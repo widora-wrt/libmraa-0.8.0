@@ -612,6 +612,7 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     png_destroy_read_struct(&png_ptr, &info_ptr, 0);
     fclose(file);
     free(bgra);
+    return MRAA_SUCCESS;
 }
 mraa_result_t
 mraa_lcd_writeline(mraa_lcd_context dev, const char* buf)
@@ -920,4 +921,5 @@ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
 {
    if(strcmp(name, ".jpg") == 0)return mraa_lcd_drawjpg(dev,x,y,name);
    if(strcmp(name, ".png") == 0)return mraa_lcd_drawpng(dev,x,y,name);
+   return MRAA_SUCCESS; 
 }
