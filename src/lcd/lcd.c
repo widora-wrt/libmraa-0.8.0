@@ -595,7 +595,7 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     printf("size=%d\r\n",size);
     int pos = 0;
     png_bytep* row_pointers = png_get_rows(png_ptr, info_ptr);
-    printf("row_pointers=%d\r\n",row_pointers);
+    printf("row_pointers=%d,%d\r\n",row_pointers,row_pointers[0][0]);
     for(i = 0; i < 10; i++)
     {
         for(j = 0; j < (4 * 10); j += 4)
