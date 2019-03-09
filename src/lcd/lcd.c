@@ -592,13 +592,13 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     int m_height = png_get_image_height(png_ptr, info_ptr);
     int color_type = png_get_color_type(png_ptr, info_ptr);
     int size = m_height * m_width * 4;
-    printf("size=%d,m_width=%d,m_height=%\r\n",size,m_width,m_height);
+    printf("size=%d,m_width=%d,m_height=%d\r\n",size,m_width,m_height);
     int pos = 0;
     png_bytep* row_pointers = png_get_rows(png_ptr, info_ptr);
     printf("row_pointers=%d,%d\r\n",row_pointers,row_pointers[0][0]);
     for(i = 0; i < 10; i++)
     {
-        for(j = 0; j < (4 * m_width); j += 4)
+        for(j = 0; j < (4 * 20); j += 4)
         {
          //   tc=mraa_lcd_getdot(dev,j/4+x,i+y);
             alpha=row_pointers[i][j + 3];
@@ -607,6 +607,7 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
 			color|=(row_pointers[i][j+1]*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
             color<<=8;
 			color|=(row_pointers[i][j+2]*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
+            printf("color=%d",,RGB8882RGB565(color));
             mraa_lcd_drawdot(dev,j/4+x,i+y,RGB8882RGB565(color));
         }
     }
