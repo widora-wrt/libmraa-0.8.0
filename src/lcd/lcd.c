@@ -163,6 +163,7 @@ mraa_lcd_init_raw(const char* path)
 }
 unsigned short mraa_lcd_rgb2tft(int c)
 {
+    return RGB8882RGB565(c);
     unsigned char r,g,b;
     unsigned int t;
     b=(c&0xff)/8;c>>=8;
@@ -548,7 +549,7 @@ unsigned char * mraa_lcd_getjpg(mraa_lcd_context dev,char * filename, int *w, in
 	return temp;
 	
 }
-#define RGB8882RGB565(rgb888)   ((((rgb888)&0xf80000)>>8)|(((rgb888)&0xfc00)>>5)|(((rgb888)&0xf8)>>3))
+
 mraa_result_t
 mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name)
 {

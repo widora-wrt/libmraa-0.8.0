@@ -92,6 +92,8 @@ extern const FontTypeStruct GBKLib_FontType4848;
 const FontTypeStruct FontGetType(unsigned short f);
 
 extern const unsigned int gb2312_utf8_code[][2];
+
+#define RGB8882RGB565(rgb888)   ((((rgb888)&0xf80000)>>8)|(((rgb888)&0xfc00)>>5)|(((rgb888)&0xf8)>>3))
 /**
  * Initialise lcd_context, uses board mapping
  *
