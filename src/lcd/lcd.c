@@ -607,10 +607,11 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
 			color|=(row_pointers[i][j+1]*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
             color<<=8;
 			color|=(row_pointers[i][j+2]*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
-            printf("color=%d",,RGB8882RGB565(color));
+            printf("color=%d",RGB8882RGB565(color));
             mraa_lcd_drawdot(dev,j/4+x,i+y,RGB8882RGB565(color));
         }
     }
+    printf("over--------------\n");
     png_destroy_read_struct(&png_ptr, &info_ptr, 0);
     fclose(file);
     return MRAA_SUCCESS;
