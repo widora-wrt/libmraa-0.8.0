@@ -905,7 +905,7 @@ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
  mraa_result_t
  mraa_lcd_drawpic(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name)
 {
-   if(strcmp(name, ".jpg") !=-1)return mraa_lcd_drawjpg(dev,x,y,name);
-   if(strcmp(name, ".png") !=-1)return mraa_lcd_drawpng(dev,x,y,name);
+   if(strstr(name, ".jpg")>-1)return mraa_lcd_drawjpg(dev,x,y,name);
+   if(strstr(name, ".png")>-1)return mraa_lcd_drawpng(dev,x,y,name);
    return MRAA_SUCCESS; 
 }
