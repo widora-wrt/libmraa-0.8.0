@@ -161,17 +161,7 @@ mraa_lcd_init_raw(const char* path)
     }
     return dev;
 }
-unsigned short mraa_lcd_rgb2tft(int c)
-{
-    return RGB8882RGB565(c);
-    unsigned char r,g,b;
-    unsigned int t;
-    b=(c&0xff)/8;c>>=8;
-    g=(c&0xff)/4;c>>=8;
-    r=(c&0xff)/8;
-    t=r;t<<=6;t|=g;t<<=5;t|=b;
-    return t;
-}
+
 mraa_result_t
 mraa_lcd_drawdot(mraa_lcd_context dev,unsigned int x,unsigned int y,unsigned short color)
 {
@@ -566,7 +556,7 @@ mraa_lcd_drawjpg(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
 			color|=  imgbuf[i*3 + j*w*3 + 1];
             color<<=8;
 			color|= imgbuf[i*3 + j*w*3+2];
-            mraa_lcd_drawdot(dev,x+i,y+j,mraa_lcd_rgb2tft(color));
+            mraa_lcd_drawdot(dev,x+i,y+j,RGB8882RGB565(color));
 		}
 	}
     free(imgbuf);
@@ -582,7 +572,6 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     int color;
     unsigned char alpha;
     unsigned short tc;
-    printf("name=%s\r\n",name);
     FILE* file = fopen(name, "rb");
     png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     png_infop info_ptr = png_create_info_struct(png_ptr);
@@ -593,10 +582,8 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
     int m_height = png_get_image_height(png_ptr, info_ptr);
     int color_type = png_get_color_type(png_ptr, info_ptr);
     int size = m_height * m_width * 4;
-    printf("size=%d,m_width=%d,m_height=%d\r\n",size,m_width,m_height);
     int pos = 0;
     png_bytep* row_pointers = png_get_rows(png_ptr, info_ptr);
-    printf("row_pointers=%d,%d\r\n",row_pointers,row_pointers[0][0]);
     for(i = 0; i < m_height; i++)
     {
         for(j = 0; j < (4 * m_width); j += 4)
@@ -611,7 +598,6 @@ mraa_lcd_drawpng(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsign
             mraa_lcd_drawdot(dev,j/4+x,i+y,RGB8882RGB565(color));
         }
     }
-    printf("over--------------\n");
     png_destroy_read_struct(&png_ptr, &info_ptr, 0);
     fclose(file);
     return MRAA_SUCCESS;

@@ -126,7 +126,6 @@ mraa_result_t mraa_lcd_stop(mraa_lcd_context dev);
  * @param length maximum size of buffer
  * @return the number of bytes read, or -1 if an error occurred
  */
-unsigned short mraa_lcd_rgb2tft(int c);
 mraa_result_t mraa_lcd_drawdot(mraa_lcd_context dev,unsigned int x,unsigned int y,unsigned short color);
 mraa_result_t mraa_lcd_drawline(mraa_lcd_context dev,unsigned int x1,unsigned int y1,unsigned int x2,unsigned int y2,unsigned short color);
 mraa_result_t mraa_lcd_drawrect(mraa_lcd_context dev,unsigned int x1,unsigned int y1,unsigned int x2,unsigned int y2,unsigned short Color);
