@@ -134,12 +134,12 @@ class Lcd
     Result
     drawJpg(float x,float y,std::string data)
     {
-        return (Result) mraa_lcd_drawjpg(m_lcd,x,y,(const unsigned char *)data.c_str());
+        return (Result) mraa_lcd_drawpic(m_lcd,x,y,(const unsigned char *)data.c_str());
     }
     Result
     drawPng(float x,float y,std::string data)
     {
-        return (Result) mraa_lcd_drawpng(m_lcd,x,y,(const unsigned char *)data.c_str());
+        return (Result) mraa_lcd_drawpic(m_lcd,x,y,(const unsigned char *)data.c_str());
     }
     Result
     drawPic(float x,float y,std::string data)

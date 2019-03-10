@@ -906,6 +906,7 @@ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
  mraa_lcd_drawpic(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name)
 {
    if(strstr(name, ".jpg")>0)return mraa_lcd_drawjpg(dev,x,y,name);
-   if(strstr(name, ".png")>0)return mraa_lcd_drawpng(dev,x,y,name);
+   else if(strstr(name, ".png")>0)return mraa_lcd_drawpng(dev,x,y,name);
+   else printf("not suppeded");
    return MRAA_SUCCESS; 
 }
