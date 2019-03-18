@@ -69,7 +69,7 @@
 #include <stdlib.h>
 #include FT_FREETYPE_H
 #define MAPWIDTH   600
-unsigned char image[240][320];
+unsigned char image[320][240];
 
 #define IO_BUFFER 256
 #define BOUNDARY "boundarydonotcross"
@@ -1070,12 +1070,13 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
   FT_Matrix     matrix;             
   FT_Vector     pen;                   
   FT_Error      error;
+  int a,b;
   double        angle;
   int           target_height;
   int           n,w=0;
   angle         = (0.0/360 )*3.14159*2;    
   target_height = size;
-  printf("size=%d,x=%d,y=%d,color_f=%x,color_b=%x,color_a=%d\n",size,x,y,color_f,color_b,color_a);
+  for(a=0;a<240;a++)for(b=0;b<320;b++)image[b][a]=0;
   error = FT_Init_FreeType( &library );            
   error = FT_New_Face( library,  "/www/opt/freetype/ios-s.ttf", 0, &face );
   FT_Set_Pixel_Sizes(face, size, 0);
