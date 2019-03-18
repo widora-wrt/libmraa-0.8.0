@@ -62,7 +62,14 @@
  #include <sys/time.h>
  #include <pthread.h>
 #define MAXLINE 1024
- 
+#include <math.h>
+#include <ft2build.h>
+#include <stdlib.h>
+#include <wchar.h>
+#include <stdlib.h>
+#include FT_FREETYPE_H
+#define MAPWIDTH   600
+unsigned char image[240][320];
 
 #define IO_BUFFER 256
 #define BOUNDARY "boundarydonotcross"
@@ -909,4 +916,189 @@ mraa_result_t mraa_lcd_screenstream(mraa_lcd_context dev,char * name)
    else if(strstr(name, ".png")>0)return mraa_lcd_drawpng(dev,x,y,name);
    else printf("not suppeded");
    return MRAA_SUCCESS; 
+}
+
+mraa_result_t 
+mraa_lcd_draw_bitmap(mraa_lcd_context dev,int size, FT_Bitmap*  bitmap,FT_Int x,FT_Int y)
+{
+  FT_Int  i, j, p, q;
+  FT_Int  x_max = x + bitmap->width;
+  FT_Int  y_max = y + bitmap->rows;
+  for ( i = x, p = 0; i < x_max; i++, p++ )
+  {
+    for ( j = y, q = 0; j < y_max; j++, q++ )
+    {
+      if ( i < 0      || j < 0       ||
+           i >= MAPWIDTH || j >= size )
+        continue;
+      image[j][i] |= bitmap->buffer[q * bitmap->width + p];
+    }
+  }
+  return MRAA_SUCCESS; 
+}
+mraa_result_t 
+mraa_lcd_draw_image(mraa_lcd_context dev,int size,int w,int x,int y,unsigned int f,unsigned int b,unsigned int a)
+{
+  int i,j;
+  int color;
+  unsigned int tc;
+  unsigned char alpha;
+  for (  i = 0; i < size; i++ )
+  {
+    for (  j = 0; j < w; j++ )
+    {
+        if(a!=b)mraa_lcd_drawdot(dev,x+j,y+i,RGB8882RGB565(b));
+        tc=mraa_lcd_getdot(dev,x+j,y+i);
+        alpha=image[i][j];
+        color= ((f>>16)&0xff*alpha/255)+((tc&RGB565_MASK_RED)>>8)*(255-alpha)/255;
+        color<<=8;
+        color|=((f>>8)&0xff*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
+        color<<=8;
+        color|=(f&0xff*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
+        mraa_lcd_drawdot(dev,x+j,y+i,RGB8882RGB565(color));
+    }
+  }
+  return MRAA_SUCCESS; 
+}
+
+int enc_utf8_to_unicode_one(const unsigned char* pInput, unsigned long *Unic)  
+{  
+    char b1, b2, b3, b4, b5, b6;  
+    *Unic = 0x0; 
+    int utfbytes;
+    if((pInput[0]&0xf0)==0xe0)utfbytes=3;else utfbytes=2;
+    unsigned char *pOutput = (unsigned char *) Unic;  
+    switch ( utfbytes )  
+    {  
+        case 0:  
+            *pOutput     = *pInput;  
+            utfbytes    += 1;  
+            break;  
+        case 2:  
+            b1 = *pInput;  
+            b2 = *(pInput + 1);  
+            if ( (b2 & 0xE0) != 0x80 )  
+                return 0;  
+            *pOutput     = (b1 << 6) + (b2 & 0x3F);  
+            *(pOutput+1) = (b1 >> 2) & 0x07;  
+            break;  
+        case 3:  
+            b1 = *pInput;  
+            b2 = *(pInput + 1);  
+            b3 = *(pInput + 2);  
+            if ( ((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80) )  
+                return 0;  
+            *pOutput     = (b2 << 6) + (b3 & 0x3F);  
+            *(pOutput+1) = (b1 << 4) + ((b2 >> 2) & 0x0F);  
+            break;  
+        case 4:  
+            b1 = *pInput;  
+            b2 = *(pInput + 1);  
+            b3 = *(pInput + 2);  
+            b4 = *(pInput + 3);  
+            if ( ((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80)  
+                    || ((b4 & 0xC0) != 0x80) )  
+                return 0;  
+            *pOutput     = (b3 << 6) + (b4 & 0x3F);  
+            *(pOutput+1) = (b2 << 4) + ((b3 >> 2) & 0x0F);  
+            *(pOutput+2) = ((b1 << 2) & 0x1C)  + ((b2 >> 4) & 0x03);  
+            break;  
+        case 5:  
+            b1 = *pInput;  
+            b2 = *(pInput + 1);  
+            b3 = *(pInput + 2);  
+            b4 = *(pInput + 3);  
+            b5 = *(pInput + 4);  
+            if ( ((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80)  
+                    || ((b4 & 0xC0) != 0x80) || ((b5 & 0xC0) != 0x80) )  
+                return 0;  
+            *pOutput     = (b4 << 6) + (b5 & 0x3F);  
+            *(pOutput+1) = (b3 << 4) + ((b4 >> 2) & 0x0F);  
+            *(pOutput+2) = (b2 << 2) + ((b3 >> 4) & 0x03);  
+            *(pOutput+3) = (b1 << 6);  
+            break;  
+        case 6:  
+            b1 = *pInput;  
+            b2 = *(pInput + 1);  
+            b3 = *(pInput + 2);  
+            b4 = *(pInput + 3);  
+            b5 = *(pInput + 4);  
+            b6 = *(pInput + 5);  
+            if ( ((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80)  
+                    || ((b4 & 0xC0) != 0x80) || ((b5 & 0xC0) != 0x80)  
+                    || ((b6 & 0xC0) != 0x80) )  
+                return 0;  
+            *pOutput     = (b5 << 6) + (b6 & 0x3F);  
+            *(pOutput+1) = (b5 << 4) + ((b6 >> 2) & 0x0F);  
+            *(pOutput+2) = (b3 << 2) + ((b4 >> 4) & 0x03);  
+            *(pOutput+3) = ((b1 << 6) & 0x40) + (b2 & 0x3F);  
+            break;  
+        default:  
+            return 0;  
+            break;  
+    }  
+  
+    return utfbytes;  
+}  
+wchar_t * utf8_unicode(uint8 *str)
+{
+  int i=0,n=0;
+  uint8 buf[2];
+  wchar_t *pwc = (wchar_t *)malloc(255);
+  while(str[i])
+  {
+    if(str[i]<0x80)
+    {
+      pwc[n++]=str[i];i++;
+    }else
+    {
+      unsigned long aaaa;
+      enc_utf8_to_unicode_one(&str[i],&aaaa);
+      pwc[n++]=aaaa;
+      if((str[i]&0xf0)==0xe0)i+=3;else i+=2;
+    }
+  }
+  pwc[n++]=0;
+  return pwc;
+}
+mraa_result_t 
+drawFreetype(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,uint8 *str,uint32 color_f,uint32 color_b,uint32 color_a)
+{
+  FT_Library    library;
+  FT_Face       face;
+  FT_GlyphSlot  slot;
+  FT_Matrix     matrix;             
+  FT_Vector     pen;                   
+  FT_Error      error;
+  double        angle;
+  int           target_height;
+  int           n,w=0;
+  angle         = (0.0/360 )*3.14159*2;    
+  target_height = size;
+  error = FT_Init_FreeType( &library );            
+  error = FT_New_Face( library,  "/www/opt/freetype/ios-s.ttf", 0, &face );
+  FT_Set_Pixel_Sizes(face, size, 0);
+  slot = face->glyph;
+  matrix.xx = (FT_Fixed)( cos( angle ) * 0x10000L );
+  matrix.xy = (FT_Fixed)(-sin( angle ) * 0x10000L );
+  matrix.yx = (FT_Fixed)( sin( angle ) * 0x10000L );
+  matrix.yy = (FT_Fixed)( cos( angle ) * 0x10000L );
+  pen.x = 0;
+  pen.y =20;
+  wchar_t *chinese_char =utf8_unicode(str);
+  for ( n = 0; chinese_char[n]!=0; n++ )
+  {
+    FT_Set_Transform( face, &matrix, &pen );
+    error = FT_Load_Char( face, chinese_char[n], FT_LOAD_RENDER );
+    if (error) continue;            
+    mraa_lcd_draw_bitmap(dev,size,&slot->bitmap,slot->bitmap_left,target_height-target_height*13/100-slot->bitmap_top );
+    pen.x += slot->advance.x;
+    pen.y += slot->advance.y;
+    w+=slot->bitmap.width;
+  }
+  free(chinese_char);
+  mraa_lcd_draw_image(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
+  FT_Done_Face(face);
+  FT_Done_FreeType(library);
+  return MRAA_SUCCESS; 
 }
