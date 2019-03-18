@@ -161,7 +161,7 @@ mraa_boolean_t mraa_lcd_getdotaraaybit(mraa_lcd_context dev,int x,int y);
 unsigned short mraa_lcd_getdot(mraa_lcd_context dev,unsigned int x,unsigned int y);
 mraa_result_t mraa_lcd_selectaraaydot(mraa_lcd_context dev, int x,int y,int color);
 mraa_result_t mraa_lcd_drawpic(mraa_lcd_context dev,unsigned int x,unsigned int y,const unsigned char *name);
-mraa_result_t mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,const uint8 *str,uint32 color_f,uint32 color_b,uint32 color_a);
+mraa_result_t mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,const uint8 *str,int color_f,int color_b,int color_a);
 /**
  * Write bytes in buffer to a device
  *
