@@ -1062,7 +1062,7 @@ wchar_t * utf8_unicode(uint8 *str)
   return pwc;
 }
 mraa_result_t 
-drawFreetype(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,uint8 *str,uint32 color_f,uint32 color_b,uint32 color_a)
+mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,const uint8 *str,uint32 color_f,uint32 color_b,uint32 color_a)
 {
   FT_Library    library;
   FT_Face       face;

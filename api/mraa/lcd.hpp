@@ -132,6 +132,15 @@ class Lcd
         RGB8882RGB565((int)strtol(a_color.c_str()+1,0, 16)));
     }
     Result
+    drawString1(unsigned short f,float x,float y,std::string data,std::string f_color,std::string b_color,std::string a_color)
+    {
+        return (Result) mraa_lcd_drawfreetype_string(m_lcd,f,x,y,(const unsigned char *)data.c_str(), \
+        (int)strtol(f_color.c_str()+1,0, 16), \
+        (int)strtol(b_color.c_str()+1,0, 16), \
+        (int)strtol(a_color.c_str()+1,0, 16));
+    }
+    
+    Result
     drawJpg(float x,float y,std::string data)
     {
         return (Result) mraa_lcd_drawpic(m_lcd,x,y,(const unsigned char *)data.c_str());
