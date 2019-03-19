@@ -68,8 +68,8 @@
 #include <wchar.h>
 #include <stdlib.h>
 #include FT_FREETYPE_H
-#define MAPWIDTH   600
-unsigned char image[240][320];
+#define MAPWIDTH   320
+unsigned char image[240][MAPWIDTH];
 
 #define IO_BUFFER 256
 #define BOUNDARY "boundarydonotcross"
