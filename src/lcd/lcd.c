@@ -1078,7 +1078,7 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
   target_height = size;
   for(a=0;a<240;a++)for(b=0;b<320;b++)image[a][b]=0;
   error = FT_Init_FreeType( &library );            
-  error = FT_New_Face( library,  "/www/pyly/font/ios-s.ttf", 0, &face );
+  error = FT_New_Face( library,  "/www/pyly/font/pingfang.ttf", 0, &face );
   FT_Set_Pixel_Sizes(face, size, 0);
   slot = face->glyph;
   matrix.xx = (FT_Fixed)( cos( angle ) * 0x10000L );
