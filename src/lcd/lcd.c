@@ -1074,6 +1074,7 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
   double        angle;
   int           target_height;
   int           n;
+  int left=0;
   angle         = (0.0/360 )*3.14159*2;    
   target_height = size;
   for(a=0;a<240;a++)for(b=0;b<320;b++)image[a][b]=0;
@@ -1102,10 +1103,12 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
     printf("slot->bitmap_left =%d\r\n",slot->bitmap_left);
     printf("target_height-target_height =%d\r\n",target_height-target_height);
     printf("slot->bitmap_top =%d\r\n",slot->bitmap_top);
+    if(slot->bitmap_left>0)left=slot->bitmap_left;
+    else if(n>0)left+=size/2;
   }
   printf("slot->bitmap.width =%d\r\n",slot->bitmap.width);
   free(chinese_char);
-  mraa_lcd_draw_image(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
+  mraa_lcd_draw_image(dev,size,left+slot->bitmap.width,x,y,color_f,color_b,color_a);
   FT_Done_Face(face);
   FT_Done_FreeType(library);
   return MRAA_SUCCESS; 
