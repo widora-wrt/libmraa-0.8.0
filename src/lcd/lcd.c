@@ -1097,8 +1097,12 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
     mraa_lcd_draw_bitmap(dev,size,&slot->bitmap,slot->bitmap_left,target_height-target_height*13/100-slot->bitmap_top );
     pen.x += slot->advance.x;
     pen.y += slot->advance.y;
-    printf("pen.x =%d\r\n",pen.x);
+    printf("slot->advance.x =%d\r\n",slot->advance.x);
+    printf("slot->bitmap_left =%d\r\n",slot->bitmap_left);
+    printf("target_height-target_height =%d\r\n",target_height-target_height);
+    printf("slot->bitmap_top =%d\r\n",slot->bitmap_top);
   }
+  printf("slot->bitmap.width =%d\r\n",slot->bitmap.width);
   free(chinese_char);
   mraa_lcd_draw_image(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
   FT_Done_Face(face);
