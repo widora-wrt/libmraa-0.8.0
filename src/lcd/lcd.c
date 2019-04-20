@@ -1107,3 +1107,42 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
   FT_Done_FreeType(library);
   return MRAA_SUCCESS; 
 }
+mraa_result_t 
+mraa_lcd_drawawesome_index(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,int ind,int color_f,int color_b,int color_a)
+{
+  FT_Library    library;
+  FT_Face       face;
+  FT_GlyphSlot  slot;
+  FT_Matrix     matrix;             
+  FT_Vector     pen;                   
+  FT_Error      error;
+  int a,b;
+  double        angle;
+  int           target_height;
+  int           n;
+  angle         = (0.0/360 )*3.14159*2;    
+  target_height = size;
+  for(a=0;a<240;a++)for(b=0;b<320;b++)image[a][b]=0;
+  error = FT_Init_FreeType( &library );            
+  error = FT_New_Face( library,  "/www/pyly/font/awesome.ttf", 0, &face );
+  FT_Set_Pixel_Sizes(face, size, 0);
+  slot = face->glyph;
+  matrix.xx = (FT_Fixed)( cos( angle ) * 0x10000L );
+  matrix.xy = (FT_Fixed)(-sin( angle ) * 0x10000L );
+  matrix.yx = (FT_Fixed)( sin( angle ) * 0x10000L );
+  matrix.yy = (FT_Fixed)( cos( angle ) * 0x10000L );
+  pen.x = 0;
+  pen.y =20;
+  FT_Set_Transform( face, &matrix, &pen );
+  error = FT_Load_Char( face, 0xf000+ind, FT_LOAD_RENDER );
+  if(error)printf("font error=%d\r\n",ind);
+  if (error) continue;       
+  mraa_lcd_draw_bitmap(dev,size,&slot->bitmap,slot->bitmap_left,target_height-target_height*13/100-slot->bitmap_top );
+  pen.x += slot->advance.x;
+  pen.y += slot->advance.y;
+  free(chinese_char);
+  mraa_lcd_draw_image(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
+  FT_Done_Face(face);
+  FT_Done_FreeType(library);
+  return MRAA_SUCCESS; 
+}

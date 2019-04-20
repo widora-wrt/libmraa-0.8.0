@@ -139,6 +139,14 @@ class Lcd
         (int)strtol(b_color.c_str()+1,0, 16), \
         (int)strtol(a_color.c_str()+1,0, 16));
     }
+    Result
+    drawAwesome(unsigned short f,float x,float y,float ind,std::string f_color,std::string b_color,std::string a_color)
+    {
+        return (Result) mraa_lcd_drawawesome_index(m_lcd,f,x,y,(int)ind, \
+        (int)strtol(f_color.c_str()+1,0, 16), \
+        (int)strtol(b_color.c_str()+1,0, 16), \
+        (int)strtol(a_color.c_str()+1,0, 16));
+    }
     
     Result
     drawJpg(float x,float y,std::string data)
