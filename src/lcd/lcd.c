@@ -1093,7 +1093,8 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
     FT_Set_Transform( face, &matrix, &pen );
     error = FT_Load_Char( face, chinese_char[n], FT_LOAD_RENDER );
     if(error)printf("font error%d\r\n",n);
-    if (error) continue;            
+    if (error) continue;       
+    printf("font%d=%d\r\n",n,chinese_char[n]);     
     mraa_lcd_draw_bitmap(dev,size,&slot->bitmap,slot->bitmap_left,target_height-target_height*13/100-slot->bitmap_top );
     pen.x += slot->advance.x;
     pen.y += slot->advance.y;
@@ -1104,7 +1105,7 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
   }
   printf("slot->bitmap.width =%d\r\n",slot->bitmap.width);
   free(chinese_char);
-  mraa_lcd_draw_image(dev,size,300,x,y,color_f,color_b,color_a);
+  mraa_lcd_draw_image(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
   FT_Done_Face(face);
   FT_Done_FreeType(library);
   return MRAA_SUCCESS; 
