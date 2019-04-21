@@ -929,7 +929,7 @@ mraa_lcd_draw_bitmap(mraa_lcd_context dev,int size, FT_Bitmap*  bitmap,FT_Int x,
     for ( j = y, q = 0; j < y_max; j++, q++ )
     {
       if ( i < 0      || j < 0       ||
-           i >= MAPWIDTH || j >= size )
+           i >= MAPWIDTH || j >= size ||j>=240)
         continue;
       image[j][i] |= bitmap->buffer[q * bitmap->width + p];
     }
