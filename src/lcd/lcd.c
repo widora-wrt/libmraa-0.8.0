@@ -1111,6 +1111,31 @@ mraa_lcd_drawfreetype_string(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,
   return MRAA_SUCCESS; 
 }
 mraa_result_t 
+mraa_lcd_draw_image1(mraa_lcd_context dev,int size,int w,int x,int y,unsigned int f,unsigned int b,unsigned int a)
+{
+  int i,j;
+  int color;
+  unsigned int tc;
+  unsigned char alpha;
+  for (  i = 0; i < size; i++ )
+  {
+    for (  j = 0; j < w; j++ )
+    {
+        if(a!=b)mraa_lcd_drawdot(dev,x+j-w/2,y+i-size/2,RGB8882RGB565(b));
+        tc=mraa_lcd_getdot(dev,x+j-w/2,y+i-size/2);
+        alpha=image[i][j];
+        color= ((f>>16)&0xff*alpha/255)+((tc&RGB565_MASK_RED)>>8)*(255-alpha)/255;
+        color<<=8;
+        color|=((f>>8)&0xff*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
+        color<<=8;
+        color|=(f&0xff*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
+        mraa_lcd_drawdot(dev,x+j-w/2,y+i-size/2,RGB8882RGB565(color));
+    }
+  }
+  return MRAA_SUCCESS; 
+}
+
+mraa_result_t 
 mraa_lcd_drawawesome_index(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,int ind,int color_f,int color_b,int color_a)
 {
   FT_Library    library;
@@ -1142,7 +1167,7 @@ mraa_lcd_drawawesome_index(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,in
   mraa_lcd_draw_bitmap(dev,size,&slot->bitmap,slot->bitmap_left,target_height-target_height*13/100-slot->bitmap_top );
   pen.x += slot->advance.x;
   pen.y += slot->advance.y;
-  mraa_lcd_draw_image(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
+  mraa_lcd_draw_image1(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
   FT_Done_Face(face);
   FT_Done_FreeType(library);
   return MRAA_SUCCESS; 
