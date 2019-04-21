@@ -947,15 +947,18 @@ mraa_lcd_draw_image(mraa_lcd_context dev,int size,int w,int x,int y,unsigned int
   {
     for (  j = 0; j < w; j++ )
     {
-        if(a!=b)mraa_lcd_drawdot(dev,x+j,y+i,RGB8882RGB565(b));
-        tc=mraa_lcd_getdot(dev,x+j,y+i);
-        alpha=image[i][j];
-        color= ((f>>16)&0xff*alpha/255)+((tc&RGB565_MASK_RED)>>8)*(255-alpha)/255;
-        color<<=8;
-        color|=((f>>8)&0xff*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
-        color<<=8;
-        color|=(f&0xff*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
-        mraa_lcd_drawdot(dev,x+j,y+i,RGB8882RGB565(color));
+        if(((x+j)>=0)&&((y+i)>=0))
+        {
+            if(a!=b)mraa_lcd_drawdot(dev,x+j,y+i,RGB8882RGB565(b));
+            tc=mraa_lcd_getdot(dev,x+j,y+i);
+            alpha=image[i][j];
+            color= ((f>>16)&0xff*alpha/255)+((tc&RGB565_MASK_RED)>>8)*(255-alpha)/255;
+            color<<=8;
+            color|=((f>>8)&0xff*alpha/255)+((tc&RGB565_MASK_GREEN)>>3)*(255-alpha)/255;;
+            color<<=8;
+            color|=(f&0xff*alpha/255)+((tc&RGB565_MASK_BLUE)<<3)*(255-alpha)/255;
+            mraa_lcd_drawdot(dev,x+j,y+i,RGB8882RGB565(color));
+        }
     }
   }
   return MRAA_SUCCESS; 
