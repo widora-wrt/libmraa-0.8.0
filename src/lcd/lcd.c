@@ -1162,6 +1162,7 @@ mraa_lcd_drawawesome_index(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,in
   pen.x = 0;
   pen.y =20;
   FT_Set_Transform( face, &matrix, &pen );
+  if(ind>=0xf000)ind-=0xf000;
   error = FT_Load_Char( face, 0xf000+ind, FT_LOAD_RENDER );
   if(error)printf("font error=%d\r\n",ind);
   mraa_lcd_draw_bitmap(dev,size,&slot->bitmap,slot->bitmap_left,target_height-target_height*13/100-slot->bitmap_top );
