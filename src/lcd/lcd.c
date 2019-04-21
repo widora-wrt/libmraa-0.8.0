@@ -924,6 +924,7 @@ mraa_lcd_draw_bitmap(mraa_lcd_context dev,int size, FT_Bitmap*  bitmap,FT_Int x,
   FT_Int  i, j, p, q;
   FT_Int  x_max = x + bitmap->width;
   FT_Int  y_max = y + bitmap->rows;
+  if(x<0)x=0;if(y<0)y=0;
   for ( i = x, p = 0; i < x_max; i++, p++ )
   {
     for ( j = y, q = 0; j < y_max; j++, q++ )
@@ -946,6 +947,7 @@ mraa_lcd_draw_image(mraa_lcd_context dev,int size,int w,int x,int y,unsigned int
   int color;
   unsigned int tc;
   unsigned char alpha;
+  if(x<0)x=0;if(y<0)y=0;
   for (  i = 0; i < size; i++ )
   {
     for (  j = 0; j < w; j++ )
