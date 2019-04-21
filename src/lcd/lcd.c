@@ -1139,6 +1139,8 @@ mraa_lcd_drawawesome_index(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,in
   mraa_lcd_draw_bitmap(dev,size,&slot->bitmap,slot->bitmap_left,target_height-target_height*13/100-slot->bitmap_top );
   pen.x += slot->advance.x;
   pen.y += slot->advance.y;
+  x-=(slot->bitmap_left+slot->bitmap.width)/2;
+  y-=size/2;
   mraa_lcd_draw_image(dev,size,slot->bitmap_left+slot->bitmap.width,x,y,color_f,color_b,color_a);
   FT_Done_Face(face);
   FT_Done_FreeType(library);
