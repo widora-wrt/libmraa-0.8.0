@@ -45,7 +45,7 @@ char get_time()
     printf("%d ", 1900 + p->tm_year);
     printf("%d\n", p->tm_yday);*/
     if((1900 + p->tm_year)>2018)if(p->tm_mon>10){
-        printf("timer error visit pyly.trtos.com\n");
+        printf("timer error please visit pyly.trtos.com\n");
         return 1;
     }
     return 0;
