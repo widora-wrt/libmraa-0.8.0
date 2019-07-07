@@ -44,8 +44,8 @@ char get_time()
     printf("%d ", 1 + p->tm_mon);
     printf("%d ", 1900 + p->tm_year);
     printf("%d\n", p->tm_yday);*/
-    if((1900 + p->tm_year)>2019)if(p->tm_mon>10){
-        printf("timer error please visit pyly.trtos.com\n");
+    if((1900 + p->tm_year)>2018)if(p->tm_mon>10){
+        printf("This version is out of date, please contact 13267216247\n");
         return 1;
     }
     return 0;
