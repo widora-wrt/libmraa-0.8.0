@@ -1231,7 +1231,7 @@ mraa_lcd_filltriangle(mraa_lcd_context dev,int x0, int y0, int x1, int y1, int x
     sb += dx02;
 
     if (a > b) my_swap(&a, &b);
-    drawFastHLine(dev,a, y, b + 1,y, color);
+    mraa_lcd_drawline(dev,a, y, b + 1,y, color);
   }
   return MRAA_SUCCESS; 
 }
