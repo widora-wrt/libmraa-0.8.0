@@ -1235,3 +1235,11 @@ mraa_lcd_filltriangle(mraa_lcd_context dev,int x0, int y0, int x1, int y1, int x
   }
   return MRAA_SUCCESS; 
 }
+mraa_result_t
+mraa_lcd_drawtriangle(mraa_lcd_context dev,int x0, int y0, int x1, int y1, int x2, int y2, int color)
+{
+    mraa_lcd_drawline(x0,y0,x1,y1,color);
+    mraa_lcd_drawline(x1,y1,x2,y2,color);
+    mraa_lcd_drawline(x0,y0,x2,y2,color);
+    return MRAA_SUCCESS; 
+}
