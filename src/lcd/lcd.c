@@ -70,7 +70,6 @@
 #include FT_FREETYPE_H
 #define MAPWIDTH   320
 unsigned char image[240][MAPWIDTH];
-swap_coord(T& a, T& b) { T t = a; a = b; b = t; }
 #define IO_BUFFER 256
 #define BOUNDARY "boundarydonotcross"
 #define STD_HEADER "Connection: close\r\n" \
@@ -1174,19 +1173,24 @@ mraa_lcd_drawawesome_index(mraa_lcd_context dev,uint16 size,uint16 x,uint16 y,in
   return MRAA_SUCCESS; 
 }
 
- 
+ void my_swap(int *a, int *b)
+{
+  int temp = *a;
+  *a = *b;
+  *b = temp;
+}
 mraa_result_t
 mraa_lcd_filltriangle(mraa_lcd_context dev,int x0, int y0, int x1, int y1, int x2, int y2, int color)
 {
   int a, b, y, last;
   if (y0 > y1) {
-    swap_coord(y0, y1); swap_coord(x0, x1);
+    my_swap(&y0, &y1); my_swap(&x0, &x1);
   }
   if (y1 > y2) {
-    swap_coord(y2, y1); swap_coord(x2, x1);
+    my_swap(&y2, &y1); my_swap(&x2, &x1);
   }
   if (y0 > y1) {
-    swap_coord(y0, y1); swap_coord(x0, x1);
+    my_swap(&y0, &y1); my_swap(&x0, &x1);
   }
 
   if (y0 == y2) { // Handle awkward all-on-same-line case as its own thing
@@ -1207,22 +1211,17 @@ mraa_lcd_filltriangle(mraa_lcd_context dev,int x0, int y0, int x1, int y1, int x
   dy12 = y2 - y1,
   sa   = 0,
   sb   = 0;
-
   if (y1 == y2) last = y1;  // Include y1 scanline
   else         last = y1 - 1; // Skip it
-
   for (y = y0; y <= last; y++) {
     a   = x0 + sa / dy01;
     b   = x0 + sb / dy02;
     sa += dx01;
     sb += dx02;
 
-    if (a > b) swap_coord(a, b);
+    if (a > b) my_swap(&a, &b);
     mraa_lcd_drawline(dev,a, y, b+ 1,y, color);
   }
-
-  // For lower part of triangle, find scanline crossings for segments
-  // 0-2 and 1-2.  This loop is skipped if y1=y2.
   sa = dx12 * (y - y1);
   sb = dx02 * (y - y0);
   for (; y <= y2; y++) {
@@ -1231,7 +1230,7 @@ mraa_lcd_filltriangle(mraa_lcd_context dev,int x0, int y0, int x1, int y1, int x
     sa += dx12;
     sb += dx02;
 
-    if (a > b) swap_coord(a, b);
+    if (a > b) my_swap(&a, &b);
     drawFastHLine(dev,a, y, b + 1,y, color);
   }
   return MRAA_SUCCESS; 
