@@ -119,6 +119,16 @@ class Lcd
         return (Result) mraa_lcd_drawcirclefill(m_lcd, x0,y0,r,RGB8882RGB565((int)strtol(colors.c_str()+1,0, 16)));
     }
     Result
+    drawTriangle(float x0,float y0,float x1,float y1,float x2,float y2,std::string colors)
+    {
+        return (Result)mraa_lcd_drawtriangle(m_lcd,x0,y0,x1,y1,x2,y2,RGB8882RGB565((int)strtol(colors.c_str()+1,0, 16)));
+    }
+    Result
+    fillTriangle(float x0,float y0,float x1,float y1,float x2,float y2,std::string colors)
+    {
+        return (Result)mraa_lcd_filltriangle(m_lcd,x0,y0,x1,y1,x2,y2,RGB8882RGB565((int)strtol(colors.c_str()+1,0, 16)));
+    }
+    Result
     drawClear(std::string colors)
     {
         return (Result) mraa_lcd_drawclear(m_lcd,RGB8882RGB565((int)strtol(colors.c_str()+1,0, 16)));
